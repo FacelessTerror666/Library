@@ -1,0 +1,44 @@
+﻿@model Library.Models.Books.BookModel
+
+@{
+    ViewData["Title"] = "CreateBook";
+}
+
+<div class="col-xs-6 col-xs-offset-3">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Добавить книгу</h3>
+        </div>
+        <div class="panel-body">
+            <form asp-action="CreateBook" asp-controller="Books" asp-anti-forgery="true" enctype="multipart/form-data">
+                <div class="validation" asp-validation-summary="ModelOnly"></div>
+                <div>
+                    <div class="form-group">
+                        <label asp-for="Name">Введите название</label>
+                        <input type="text" class="form-control" asp-for="Name" />
+                        <span asp-validation-for="Name" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Author">Введите автора</label>
+                        <input type="text" class="form-control" asp-for="Author" />
+                        <span asp-validation-for="Author" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Genre">Введите жанр</label>
+                        <input type="text" class="form-control" asp-for="Genre" />
+                        <span asp-validation-for="Genre" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Publisher">Введите издательство</label>
+                        <input type="text" class="form-control" asp-for="Publisher" />
+                        <span asp-validation-for="Publisher" />
+                    </div>
+                    <div>
+                        <input type="submit" value="Добавить" class="btn btn-default" />
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
