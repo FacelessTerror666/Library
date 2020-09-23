@@ -31,21 +31,24 @@ namespace Library.Database
             }
         }
 
-        //public void Delete(IEnumerable<TEntity> entities)
-        //{
-        //    _context.RemoveRange(entities);
-        //    _context.SaveChanges();
-        //}
+        public void Delete(IEnumerable<TEntity> entities)
+        {
+            if (entities.Count() > 0)
+            {
+                _context.RemoveRange(entities);
+                _context.SaveChanges();
+            }
+        }
 
         public IQueryable<TEntity> GetItems()
         {
             return _context.Set<TEntity>();
         }
 
-        //public void Update(TEntity entity)
-        //{
-        //    _context.SaveChanges();
-        //}
+        public void Update(TEntity entity)
+        {
+            _context.SaveChanges();
+        }
 
         public TEntity Get(long id)
         {

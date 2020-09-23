@@ -3,15 +3,17 @@ using System;
 using Library.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Library.Database.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    partial class LibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200921125337_FourthMigration")]
+    partial class FourthMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,12 @@ namespace Library.Database.Migrations
                     b.Property<string>("Publisher")
                         .HasColumnType("text");
 
+                    b.Property<long?>("ReaderId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ReaderId");
 
                     b.ToTable("Book");
                 });
@@ -264,6 +271,13 @@ namespace Library.Database.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Library.Database.Entities.Book", b =>
+                {
+                    b.HasOne("Library.Database.Entities.User", "Reader")
+                        .WithMany()
+                        .HasForeignKey("ReaderId");
                 });
 
             modelBuilder.Entity("Library.Database.Entities.Order", b =>

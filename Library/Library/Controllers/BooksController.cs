@@ -1,11 +1,8 @@
-﻿using Library.Database;
-using Library.Database.Entities;
+﻿using Library.Database.Entities;
 using Library.Database.Interfaces;
 using Library.Models.Books;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using ThreadingTask = System.Threading.Tasks;
 
@@ -24,7 +21,8 @@ namespace Library.Controllers
         public async ThreadingTask.Task<IActionResult> BooksList()
         {
             var books = await bookRepository.GetItems()
-                .Select(x => new BookModel
+                .Where(x => x.IsDeleted == false)
+                .Select(x => new BooksListModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -33,6 +31,7 @@ namespace Library.Controllers
                     Publisher = x.Publisher,
                     BookStatus = x.BookStatus
                 })
+                .OrderBy(x => x.Id)
                 .ToListAsync();
 
             return View(books);
@@ -41,18 +40,18 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult CreateBook(BookModel model)
         {
-            var book = new Book
-            {
-                Name = model.Name,
-                Author = model.Author,
-                Genre = model.Genre,
-                Publisher = model.Publisher,
-                BookStatus = Database.Enums.BookStatus.Free
-            };
+                var book = new Book
+                {
+                    Name = model.Name,
+                    Author = model.Author,
+                    Genre = model.Genre,
+                    Publisher = model.Publisher,
+                    BookStatus = Database.Enums.BookStatus.Free
+                };
 
-            bookRepository.Create(book);
+                bookRepository.Create(book);
 
-            return RedirectToAction(nameof(BooksList));
+                return RedirectToAction(nameof(BooksList));
         }
 
         [HttpGet]
@@ -61,12 +60,15 @@ namespace Library.Controllers
             return View();
         }
 
-        public ActionResult DeleteBook(Book book)
+        [HttpGet]
+        public ActionResult DeleteBook(long id)
         {
-
-            bookRepository.Delete(book);
+            var existingBook = bookRepository.Get(id);
+            existingBook.IsDeleted = true;
+            bookRepository.Update(existingBook);
 
             return RedirectToAction(nameof(BooksList));
         }
+
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Library.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Library.Database.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    partial class LibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200921085415_ThirdMigration")]
+    partial class ThirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,12 @@ namespace Library.Database.Migrations
                     b.Property<string>("Publisher")
                         .HasColumnType("text");
 
+                    b.Property<long?>("ReaderId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ReaderId");
 
                     b.ToTable("Book");
                 });
@@ -59,7 +66,7 @@ namespace Library.Database.Migrations
                     b.Property<long>("BookId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UserId")
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -266,6 +273,13 @@ namespace Library.Database.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Library.Database.Entities.Book", b =>
+                {
+                    b.HasOne("Library.Database.Entities.User", "Reader")
+                        .WithMany()
+                        .HasForeignKey("ReaderId");
+                });
+
             modelBuilder.Entity("Library.Database.Entities.Order", b =>
                 {
                     b.HasOne("Library.Database.Entities.Book", "Book")
@@ -276,9 +290,7 @@ namespace Library.Database.Migrations
 
                     b.HasOne("Library.Database.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>

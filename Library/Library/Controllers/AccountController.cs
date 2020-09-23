@@ -32,6 +32,7 @@ namespace Library.Controllers
                 User user = new User { Email = model.Email, UserName = model.Email };
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
+                await _userManager.AddToRolesAsync(user, new List<string> { RoleInitialize.Reader });
                 if (result.Succeeded)
                 {
                     // установка куки

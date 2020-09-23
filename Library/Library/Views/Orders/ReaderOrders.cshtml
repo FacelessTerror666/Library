@@ -1,0 +1,61 @@
+﻿@using Library.Database.Entities
+@model IEnumerable<Library.Models.Orders.ReaderOrdersListModel>
+
+
+@{
+    ViewData["Title"] = "ReaderOrders";
+}
+
+<p>
+    @if (User.IsInRole(RoleInitialize.Reader))
+    {
+        <div class="col-xs-2 no-padding pull-right">
+            <a asp-action="BooksList" asp-controller="Books" class="btn btn-default">Вернуться в библиотеку</a>
+        </div>
+    }
+</p>
+
+<div class="form-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">Список забронированных книг</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Author)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Genre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Publisher)
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Author)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Genre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Publisher)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

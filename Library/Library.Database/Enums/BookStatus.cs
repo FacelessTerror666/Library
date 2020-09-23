@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Library.Database.Enums
@@ -7,18 +8,21 @@ namespace Library.Database.Enums
     public enum BookStatus
     {
         /// <summary>
-        /// Свободна
+        /// Свободная
         /// </summary>
+        [Display(Name = "Свободная")]
         Free = 0,
 
         /// <summary>
-        /// Забронирована
+        /// Забронированная
         /// </summary>
+        [Display(Name = "Забронированная")]
         Booked = 10,
 
         /// <summary>
-        /// Выдана
+        /// Выданная
         /// </summary>
+        [Display(Name = "Выданная")]
         Given = 20
     }
 }
