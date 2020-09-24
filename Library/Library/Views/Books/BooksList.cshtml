@@ -81,7 +81,7 @@
                                 {
                                     @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
                                     {
-                                        @Html.ActionLink("Забронировать", "Booking", "Orders", new { id = item.Id })
+                                        @Html.ActionLink("Забронировать", "Reservation", "Orders", new { id = item.Id })
                                     }
                                 }
 

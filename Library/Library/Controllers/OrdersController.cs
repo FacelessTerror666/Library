@@ -26,7 +26,7 @@ namespace Library.Controllers
 
         [HttpGet]
         [Authorize(Roles = RoleInitialize.Reader)]
-        public async Task<IActionResult> Booking(long id)
+        public async Task<IActionResult> Reservation(long id)
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
 
@@ -51,7 +51,7 @@ namespace Library.Controllers
             var userId = user.Id;
 
             var orders = await orderRepository.GetItems()
-                .Include(x => x.Book)
+                //.Include(x => x.Book)
                 .Where(x => x.Book.IsDeleted == false)
                 .Where(x => x.UserId == userId)
                 .Select(x => new ReaderOrdersListModel
@@ -61,6 +61,7 @@ namespace Library.Controllers
                     Author = x.Book.Author,
                     Genre = x.Book.Genre,
                     Publisher = x.Book.Publisher,
+                    BookStatus = x.Book.BookStatus
                 })
                 .ToListAsync();
 
@@ -71,10 +72,9 @@ namespace Library.Controllers
         public async Task<IActionResult> AllOrders()
         {
             var anyOrders = await orderRepository.GetItems()
-                .Include(x => x.Book)
-                .Include(x => x.User)
+                //.Include(x => x.Book)
+                //.Include(x => x.User)
                 .Where(x => x.Book.IsDeleted == false)
-                .Where(x => (x.Book.BookStatus == BookStatus.Booked || x.Book.BookStatus == BookStatus.Given))
                 .Select(x => new AllOrdersListModel
                 {
                     Id = x.Id,
@@ -90,21 +90,40 @@ namespace Library.Controllers
         }
 
         [HttpGet]
-        public ActionResult ReturnBook(long id)
+        public ActionResult GiveOutBook(long id)
         {
-            var order = orderRepository.GetItems()
-                .FirstOrDefault(x => x.Id == id);
-
+            var order = orderRepository.Get(id);
             var bookId = order.BookId;
-
-            Book book = bookRepository.GetItems()
-                .FirstOrDefault(x => x.Id == bookId);
-
-            book.BookStatus = BookStatus.Free;
-
+            var book = bookRepository.Get(bookId);
+            book.BookStatus = BookStatus.Given;
             orderRepository.Update(order);
 
             return RedirectToAction(nameof(AllOrders));
         }
+
+        [HttpGet]
+        public ActionResult ReturnBook(long id)
+        {
+            var order = orderRepository.Get(id);
+            var bookId = order.BookId;
+            var book = bookRepository.Get(bookId);
+            book.BookStatus = BookStatus.Free;
+            orderRepository.Delete(order);
+
+            return RedirectToAction(nameof(AllOrders));
+        }
+
+        [HttpGet]
+        public ActionResult CancelReservation(long id)
+        {
+            var order = orderRepository.Get(id);
+            var bookId = order.BookId;
+            var book = bookRepository.Get(bookId);
+            book.BookStatus = BookStatus.Free;
+            orderRepository.Delete(order);
+
+            return RedirectToAction(nameof(ReaderOrders));
+        }
+
     }
 }

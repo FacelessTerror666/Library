@@ -17,5 +17,8 @@ namespace Library.Models.Orders
 
         [Display(Name = "Издательство")]
         public string Publisher { get; set; }
+
+        [Display(Name = "Статус")]
+        public Database.Enums.BookStatus BookStatus { get; set; }
     }
 }
