@@ -33,6 +33,11 @@
                         <input type="text" class="form-control" asp-for="Publisher" />
                         <span asp-validation-for="Publisher" />
                     </div>
+                    <div class="form-group">
+                        <label asp-for="Description">Введите описание</label>
+                        <textarea type="text" class="form-control" asp-for="Description"></textarea>
+                        <span asp-validation-for="Description" />
+                    </div>
                     <div>
                         <input type="submit" value="Добавить" class="btn btn-default" />
                     </div>

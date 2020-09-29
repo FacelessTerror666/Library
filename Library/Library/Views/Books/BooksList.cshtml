@@ -97,6 +97,8 @@
 
                         <td>
                             <div class="pull-right">
+                                @Html.ActionLink("Подробнее", "ViewBook", new { id = item.Id })
+
                                 @if (User.IsInRole(RoleInitialize.Reader))
                                 {
                                     @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)

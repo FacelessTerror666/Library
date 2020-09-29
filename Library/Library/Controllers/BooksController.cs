@@ -75,25 +75,24 @@ namespace Library.Controllers
             return View(bookFilter);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> BooksList()
-        //{
-        //    var books = await bookRepository.GetItems()
-        //        .Where(x => x.IsDeleted == false)
-        //        .Select(x => new BooksListModel
-        //        {
-        //            Id = x.Id,
-        //            Name = x.Name,
-        //            Author = x.Author,
-        //            Genre = x.Genre,
-        //            Publisher = x.Publisher,
-        //            BookStatus = x.BookStatus
-        //        })
-        //        .OrderBy(x => x.Id)
-        //        .ToListAsync();
+        [HttpGet]
+        public ActionResult ViewBook(long id)
+        {
+            var existingBook = bookRepository.GetItems()
+                .FirstOrDefault(x => x.Id == id);
 
-        //    return View(books);
-        //}
+            var model = new BookViewModel
+            {
+                Id = existingBook.Id,
+                Name = existingBook.Name,
+                Author = existingBook.Author,
+                Genre = existingBook.Genre,
+                Publisher = existingBook.Publisher,
+                Description = existingBook.Description,
+                BookStatus = existingBook.BookStatus
+            };
+            return View(model);
+        }
 
         [HttpPost]
         public ActionResult CreateBook(BookModel model)
@@ -104,6 +103,7 @@ namespace Library.Controllers
                 Author = model.Author,
                 Genre = model.Genre,
                 Publisher = model.Publisher,
+                Description = model.Description,
                 BookStatus = Database.Enums.BookStatus.Free
             };
 

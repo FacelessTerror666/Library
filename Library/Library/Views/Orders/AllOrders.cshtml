@@ -37,9 +37,6 @@
                         @Html.DisplayNameFor(model => model.Book.BookStatus)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Book.BookStatus)
-                    </th>
-                    <th>
                     </th>
                 </tr>
             </thead>
@@ -61,6 +58,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Book.BookStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.UserName)
                     </td>
                     <td>
                         <div class="pull-right">

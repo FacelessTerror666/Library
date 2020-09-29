@@ -1,9 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Library.Models.Books
 {
-    public class BookModel
+    public class BookViewModel
     {
+        [Display(Name = "Идентификатор")]
+        public long Id { get; set; }
+
         [Display(Name = "Название")]
         public string Name { get; set; }
 
@@ -18,5 +25,8 @@ namespace Library.Models.Books
 
         [Display(Name = "Описание")]
         public string Description { get; set; }
+
+        [Display(Name = "Статус")]
+        public Database.Enums.BookStatus BookStatus { get; set; }
     }
 }

@@ -15,6 +15,8 @@ namespace Library.Database.Entities
 
         public string Publisher { get; set; }
 
+        public string Description { get; set; }
+
         public BookStatus BookStatus { get; set; }
 
         public bool IsDeleted { get; set; }

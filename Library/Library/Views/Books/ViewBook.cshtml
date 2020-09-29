@@ -1,0 +1,41 @@
+﻿@model Library.Models.Books.BookViewModel
+
+@{
+    ViewData["Title"] = "ViewBook";
+}
+
+<div class="col-xs-6 col-xs-offset-3">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="Name">Название книги</label>
+                    <input type="text" readonly="readonly" class="form-control" asp-for="Name" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Author">Автор</label>
+                    <input type="text" readonly="readonly" class="form-control" asp-for="Author" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Genre">Жанр</label>
+                    <input type="text" readonly="readonly" class="form-control" asp-for="Genre" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Publisher">Издательство</label>
+                    <input type="text" readonly="readonly" class="form-control" asp-for="Publisher" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description">Описание</label>
+                    <textarea type="text" readonly="readonly" class="form-control" asp-for="Description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BookStatus">Статус задачи</label>
+                    <span type="text" readonly="readonly" class="form-control">
+                        @Html.DisplayFor(x => x.BookStatus)
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
