@@ -1,5 +1,5 @@
 ﻿@using Library.Database.Entities
-@model IEnumerable<Library.Models.Books.BooksListModel>
+@model Library.Models.Books.BooksListModel
 
 
 @{
@@ -29,6 +29,26 @@
     }
 </ul>
 
+<form asp-controller="Books" asp-action="BooksList" method="get">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <p>
+        <select asp-for="BookAuthor" asp-items="Model.Authors">
+            <option value="">Автор (все)</option>
+        </select>
+
+        <select asp-for="BookGenre" asp-items="Model.Genres">
+            <option value="">Жанр (все)</option>
+        </select>
+
+        <select asp-for="BookPublisher" asp-items="Model.Publishers">
+            <option value="">Издательство (все)</option>
+        </select>
+
+        Название: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Найти" />
+    </p>
+</form>
+
 <div class="form-group">
     <div class="panel panel-default">
         <div class="panel-heading">Список книг</div>
@@ -36,26 +56,26 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Author)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Genre)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Publisher)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BookStatus)
-                    </th>
-                    <th>
-                    </th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Author)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Genre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Publisher)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.BookStatus)
+                        </th>
+                        <th>
+                        </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.Books)
                 {
                     <tr>
 
@@ -87,6 +107,10 @@
 
                                 @if (User.IsInRole(RoleInitialize.Librarian))
                                 {
+                                    @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
+                                    {
+                                        @Html.ActionLink("Изменить", "EditBook", new { id = item.Id })
+                                    }
                                     @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
                                     {
                                         @Html.ActionLink("Удалить", "DeleteBook", new { id = item.Id })

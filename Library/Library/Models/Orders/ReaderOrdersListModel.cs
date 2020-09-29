@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Library.Database.Entities;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Library.Models.Orders
 {
@@ -6,19 +8,12 @@ namespace Library.Models.Orders
     {
         public long Id { get; set; }
 
-        [Display(Name = "Название")]
-        public string Name { get; set; }
+        public long UserId { get; set; }
 
-        [Display(Name = "Автор")]
-        public string Author { get; set; }
+        public User User { get; set; }
 
-        [Display(Name = "Жанр")]
-        public string Genre { get; set; }
+        public long BookId { get; set; }
 
-        [Display(Name = "Издательство")]
-        public string Publisher { get; set; }
-
-        [Display(Name = "Статус")]
-        public Database.Enums.BookStatus BookStatus { get; set; }
+        public Book Book { get; set; }
     }
 }

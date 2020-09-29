@@ -17,7 +17,10 @@ namespace Library.Controllers
         private readonly IRepository<Order> orderRepository;
         private readonly UserManager<User> userManager;
 
-        public OrdersController(IRepository<Book> bookRepository, IRepository<Order> orderRepository, UserManager<User> userManager)
+        public OrdersController
+            (IRepository<Book> bookRepository,
+            IRepository<Order> orderRepository,
+            UserManager<User> userManager)
         {
             this.bookRepository = bookRepository;
             this.orderRepository = orderRepository;
@@ -37,8 +40,14 @@ namespace Library.Controllers
             }
             bookRepository.Update(existingBook);
 
-            var order = new Order { BookId = existingBook.Id, UserId = user.Id, User = user };
+            var order = new Order 
+            {
+                BookId = existingBook.Id,
+                UserId = user.Id,
+                User = user
+            };
             orderRepository.Create(order);
+
 
             return RedirectToAction(nameof(ReaderOrders));
         }
@@ -51,17 +60,17 @@ namespace Library.Controllers
             var userId = user.Id;
 
             var orders = await orderRepository.GetItems()
-                //.Include(x => x.Book)
+                .Include(x => x.Book)
+                .Include(x => x.User)
                 .Where(x => x.Book.IsDeleted == false)
                 .Where(x => x.UserId == userId)
                 .Select(x => new ReaderOrdersListModel
                 {
-                    Id = x.Book.Id,
-                    Name = x.Book.Name,
-                    Author = x.Book.Author,
-                    Genre = x.Book.Genre,
-                    Publisher = x.Book.Publisher,
-                    BookStatus = x.Book.BookStatus
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    User = x.User,
+                    BookId = x.BookId,
+                    Book = x.Book
                 })
                 .ToListAsync();
 
@@ -72,17 +81,16 @@ namespace Library.Controllers
         public async Task<IActionResult> AllOrders()
         {
             var anyOrders = await orderRepository.GetItems()
-                //.Include(x => x.Book)
-                //.Include(x => x.User)
+                .Include(x => x.Book)
+                .Include(x => x.User)
                 .Where(x => x.Book.IsDeleted == false)
                 .Select(x => new AllOrdersListModel
                 {
                     Id = x.Id,
-                    Name = x.Book.Name,
-                    Author = x.Book.Author,
-                    Genre = x.Book.Genre,
-                    Publisher = x.Book.Publisher,
-                    BookStatus = x.Book.BookStatus
+                    UserId = x.UserId,
+                    User = x.User,
+                    BookId = x.BookId,
+                    Book = x.Book
                 })
                 .ToListAsync();
 

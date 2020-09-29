@@ -1,18 +1,19 @@
-﻿@model Library.Models.Books.BookModel
+﻿@model Library.Models.Books.EditBookModel
 
 @{
-    ViewData["Title"] = "CreateBook";
+    ViewData["Title"] = "EditTask";
 }
 
 <div class="col-xs-6 col-xs-offset-3">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Добавить книгу</h3>
+            <h3 class="panel-title">Изменить</h3>
         </div>
         <div class="panel-body">
-            <form asp-action="CreateBook" asp-controller="Books" asp-anti-forgery="true" enctype="multipart/form-data">
+            <form asp-action="EditBook" asp-controller="Books" asp-anti-forgery="true">
                 <div class="validation" asp-validation-summary="ModelOnly"></div>
                 <div>
+                    <input type="hidden" value="@Model.Id" name="bookId" class="form-control" />
                     <div class="form-group">
                         <label asp-for="Name">Введите название</label>
                         <input type="text" class="form-control" asp-for="Name" />
@@ -34,10 +35,11 @@
                         <span asp-validation-for="Publisher" />
                     </div>
                     <div>
-                        <input type="submit" value="Добавить" class="btn btn-default" />
+                        <input type="submit" value="Готово" class="btn btn-default" />
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+

@@ -2,9 +2,10 @@
 using Library.Database.Interfaces;
 using Library.Models.Books;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using ThreadingTask = System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Library.Controllers
 {
@@ -17,47 +18,146 @@ namespace Library.Controllers
             this.bookRepository = bookRepository;
         }
 
-        [HttpGet]
-        public async ThreadingTask.Task<IActionResult> BooksList()
+        public async Task<IActionResult> BooksList(string bookAuthor, string bookGenre, string bookPublisher, string searchString)
         {
-            var books = await bookRepository.GetItems()
-                .Where(x => x.IsDeleted == false)
-                .Select(x => new BooksListModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Author = x.Author,
-                    Genre = x.Genre,
-                    Publisher = x.Publisher,
-                    BookStatus = x.BookStatus
-                })
-                .OrderBy(x => x.Id)
-                .ToListAsync();
+            IQueryable<string> authorQuery = from b in bookRepository.GetItems()
+                                             orderby b.Author
+                                             select b.Author;
 
-            return View(books);
+            IQueryable<string> genreQuery = from b in bookRepository.GetItems()
+                                            orderby b.Genre
+                                            select b.Genre;
+
+            IQueryable<string> publisherQuery = from b in bookRepository.GetItems()
+                                                orderby b.Publisher
+                                                select b.Publisher;
+
+            var books = from m in bookRepository.GetItems()
+                        where m.IsDeleted == false
+                        select new BooksListModel
+                        {
+                            Id = m.Id,
+                            Name = m.Name,
+                            Author = m.Author,
+                            Genre = m.Genre,
+                            Publisher = m.Publisher,
+                            BookStatus = m.BookStatus
+                        };
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(x => x.Name.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(bookAuthor))
+            {
+                books = books.Where(x => x.Author == bookAuthor);
+            }
+
+            if (!string.IsNullOrEmpty(bookGenre))
+            {
+                books = books.Where(x => x.Genre == bookGenre);
+            }
+
+            if (!string.IsNullOrEmpty(bookPublisher))
+            {
+                books = books.Where(x => x.Publisher == bookPublisher);
+            }
+
+            var bookFilter = new BooksListModel
+            {
+                Authors = new SelectList(await authorQuery.Distinct().ToListAsync()),
+                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Publishers = new SelectList(await publisherQuery.Distinct().ToListAsync()),
+                Books = await books.OrderBy(m => m.Name).ToListAsync()
+            };
+
+            return View(bookFilter);
         }
+
+        //[HttpGet]
+        //public async Task<IActionResult> BooksList()
+        //{
+        //    var books = await bookRepository.GetItems()
+        //        .Where(x => x.IsDeleted == false)
+        //        .Select(x => new BooksListModel
+        //        {
+        //            Id = x.Id,
+        //            Name = x.Name,
+        //            Author = x.Author,
+        //            Genre = x.Genre,
+        //            Publisher = x.Publisher,
+        //            BookStatus = x.BookStatus
+        //        })
+        //        .OrderBy(x => x.Id)
+        //        .ToListAsync();
+
+        //    return View(books);
+        //}
 
         [HttpPost]
         public ActionResult CreateBook(BookModel model)
         {
-                var book = new Book
-                {
-                    Name = model.Name,
-                    Author = model.Author,
-                    Genre = model.Genre,
-                    Publisher = model.Publisher,
-                    BookStatus = Database.Enums.BookStatus.Free
-                };
+            var book = new Book
+            {
+                Name = model.Name,
+                Author = model.Author,
+                Genre = model.Genre,
+                Publisher = model.Publisher,
+                BookStatus = Database.Enums.BookStatus.Free
+            };
 
-                bookRepository.Create(book);
+            bookRepository.Create(book);
 
-                return RedirectToAction(nameof(BooksList));
+            return RedirectToAction(nameof(BooksList));
         }
 
         [HttpGet]
         public ActionResult CreateBook()
         {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult EditBook(long id)
+        {
+            var existingBook = bookRepository.GetItems()
+                .FirstOrDefault(x => x.Id == id);
+            if (existingBook == null)
+            {
+                return RedirectToAction(nameof(BooksList));
+            }
+            var editModel = new EditBookModel
+            {
+                Id = existingBook.Id,
+                Name = existingBook.Name,
+                Genre = existingBook.Genre,
+                Author = existingBook.Author,
+                Publisher = existingBook.Publisher
+            };
+            return View(editModel);
+        }
+
+        [HttpPost]
+        public ActionResult EditBook(EditBookModel model)
+        {
+            var existingBook = bookRepository.GetItems()
+            .FirstOrDefault(x => x.Id == model.Id);
+
+            if (existingBook == null)
+            {
+                return RedirectToAction(nameof(BooksList));
+            }
+
+            existingBook.Name = model.Name;
+            existingBook.Genre = model.Genre;
+            existingBook.Author = model.Author;
+            existingBook.Publisher = model.Publisher;
+
+            bookRepository.Update(existingBook);
+
+            return RedirectToAction(nameof(BooksList));
+
         }
 
         [HttpGet]

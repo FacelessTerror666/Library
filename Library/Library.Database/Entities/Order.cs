@@ -1,4 +1,5 @@
 ﻿using Library.Database.Interfaces;
+using System;
 
 namespace Library.Database.Entities
 {
