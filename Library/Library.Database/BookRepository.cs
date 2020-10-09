@@ -1,28 +1,29 @@
-﻿using Library.Database.Interfaces;
-using System;
+﻿using Library.Database;
+using Library.Database.Entities;
+using Library.Database.Enums;
+using Library.Database.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Library.Database
+namespace Library.Domain
 {
-    public class Repository<TEntity> : IRepository<TEntity>
-        where TEntity : class, IEntity
+    public class BookRepository<TEntity> : IBookRepository<TEntity>
+         where TEntity : class, IEntity
     {
         private readonly LibraryDbContext _context;
 
-        public Repository(LibraryDbContext context)
+        public BookRepository(LibraryDbContext context)
         {
             _context = context;
         }
 
-        public void Create(TEntity entity)
+        public void CreateBook(TEntity entity)
         {
             _context.Add(entity);
             _context.SaveChanges();
         }
 
-        public void Delete(TEntity entity)
+        public void DeleteBook(TEntity entity)
         {
             if (entity != null)
             {
@@ -31,7 +32,7 @@ namespace Library.Database
             }
         }
 
-        public void Delete(IEnumerable<TEntity> entities)
+        public void DeleteBooks(IEnumerable<TEntity> entities)
         {
             if (entities.Count() > 0)
             {
@@ -40,17 +41,17 @@ namespace Library.Database
             }
         }
 
-        public IQueryable<TEntity> GetItems()
+        public IQueryable<TEntity> GetBooks()
         {
             return _context.Set<TEntity>();
         }
 
-        public void Update(TEntity entity)
+        public void UpdateBook(TEntity entity)
         {
             _context.SaveChanges();
         }
 
-        public TEntity Get(long id)
+        public TEntity GetBook(long id)
         {
             return _context.Set<TEntity>().Find(id);
         }

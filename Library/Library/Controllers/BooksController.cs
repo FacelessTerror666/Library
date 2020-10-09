@@ -1,6 +1,6 @@
 ﻿using Library.Database.Entities;
 using Library.Database.Interfaces;
-using Library.Models.Books;
+using Library.Domain.Models.Books;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,28 +11,31 @@ namespace Library.Controllers
 {
     public class BooksController : Controller
     {
-        private readonly IRepository<Book> bookRepository;
+        private readonly IBookRepository<Book> bookRepository;
 
-        public BooksController(IRepository<Book> bookRepository)
+        public BooksController(IBookRepository<Book> bookRepository)
         {
             this.bookRepository = bookRepository;
         }
 
         public async Task<IActionResult> BooksList(string bookAuthor, string bookGenre, string bookPublisher, string searchString)
         {
-            IQueryable<string> authorQuery = from b in bookRepository.GetItems()
+            IQueryable<string> authorQuery = from b in bookRepository.GetBooks()
+                                             where b.IsDeleted == false
                                              orderby b.Author
                                              select b.Author;
 
-            IQueryable<string> genreQuery = from b in bookRepository.GetItems()
+            IQueryable<string> genreQuery = from b in bookRepository.GetBooks()
+                                            where b.IsDeleted == false
                                             orderby b.Genre
                                             select b.Genre;
 
-            IQueryable<string> publisherQuery = from b in bookRepository.GetItems()
+            IQueryable<string> publisherQuery = from b in bookRepository.GetBooks()
+                                                where b.IsDeleted == false
                                                 orderby b.Publisher
                                                 select b.Publisher;
 
-            var books = from m in bookRepository.GetItems()
+            var books = from m in bookRepository.GetBooks()
                         where m.IsDeleted == false
                         select new BooksListModel
                         {
@@ -78,7 +81,7 @@ namespace Library.Controllers
         [HttpGet]
         public ActionResult ViewBook(long id)
         {
-            var existingBook = bookRepository.GetItems()
+            var existingBook = bookRepository.GetBooks()
                 .FirstOrDefault(x => x.Id == id);
 
             var model = new BookViewModel
@@ -107,7 +110,7 @@ namespace Library.Controllers
                 BookStatus = Database.Enums.BookStatus.Free
             };
 
-            bookRepository.Create(book);
+            bookRepository.CreateBook(book);
 
             return RedirectToAction(nameof(BooksList));
         }
@@ -121,7 +124,7 @@ namespace Library.Controllers
         [HttpGet]
         public ActionResult EditBook(long id)
         {
-            var existingBook = bookRepository.GetItems()
+            var existingBook = bookRepository.GetBooks()
                 .FirstOrDefault(x => x.Id == id);
             if (existingBook == null)
             {
@@ -141,7 +144,7 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult EditBook(EditBookModel model)
         {
-            var existingBook = bookRepository.GetItems()
+            var existingBook = bookRepository.GetBooks()
             .FirstOrDefault(x => x.Id == model.Id);
 
             if (existingBook == null)
@@ -154,7 +157,7 @@ namespace Library.Controllers
             existingBook.Author = model.Author;
             existingBook.Publisher = model.Publisher;
 
-            bookRepository.Update(existingBook);
+            bookRepository.UpdateBook(existingBook);
 
             return RedirectToAction(nameof(BooksList));
 
@@ -163,9 +166,9 @@ namespace Library.Controllers
         [HttpGet]
         public ActionResult DeleteBook(long id)
         {
-            var existingBook = bookRepository.Get(id);
+            var existingBook = bookRepository.GetBook(id);
             existingBook.IsDeleted = true;
-            bookRepository.Update(existingBook);
+            bookRepository.UpdateBook(existingBook);
 
             return RedirectToAction(nameof(BooksList));
         }

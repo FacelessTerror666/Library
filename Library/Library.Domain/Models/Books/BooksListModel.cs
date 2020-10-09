@@ -1,9 +1,8 @@
-﻿using Library.Database.Entities;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Library.Models.Books
+namespace Library.Domain.Models.Books
 {
     public class BooksListModel
     {

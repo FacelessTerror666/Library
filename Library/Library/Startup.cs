@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Library.Database;
 using Library.Database.Entities;
 using Library.Database.Interfaces;
+using Library.Domain;
+using Library.Domain.Jobs;
+using Library.Domain.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +31,12 @@ namespace Library
             services.AddDbContextPool<LibraryDbContext>(options => 
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient<JobFactory>();
+            services.AddTransient<DataJob>();
+            services.AddTransient<IAuthoCancel, AuthoCancel>();
+
+            services.AddTransient(typeof(IBookRepository<>), typeof(BookRepository<>));
+            services.AddTransient(typeof(IOrderRepository<>), typeof(OrderRepository<>));
 
             services.AddIdentity<User, RoleInitialize>()
                 .AddEntityFrameworkStores<LibraryDbContext>();
@@ -71,6 +75,7 @@ namespace Library
             using var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                      .CreateScope();
+
             var services = serviceScope.ServiceProvider;
                 try
                 {
@@ -83,6 +88,8 @@ namespace Library
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred while seeding the database.");
                 }
+
+            DataScheduler.Start(serviceScope.ServiceProvider);
         }
     }
 }

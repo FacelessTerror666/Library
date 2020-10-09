@@ -1,4 +1,4 @@
-﻿namespace Library.Models.Users
+﻿namespace Library.Domain.Models.Users
 {
     public class CreateUserModel
     {

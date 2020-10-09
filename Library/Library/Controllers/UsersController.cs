@@ -1,11 +1,8 @@
-﻿using Library.Database;
-using Library.Database.Entities;
-using Library.Models.Users;
+﻿using Library.Database.Entities;
+using Library.Domain.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 

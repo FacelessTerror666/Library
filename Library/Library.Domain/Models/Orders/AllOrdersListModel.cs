@@ -1,10 +1,9 @@
 ﻿using Library.Database.Entities;
 using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Library.Models.Orders
+namespace Library.Domain.Models.Orders
 {
-    public class ReaderOrdersListModel
+    public class AllOrdersListModel
     {
         public long Id { get; set; }
 
@@ -15,5 +14,7 @@ namespace Library.Models.Orders
         public long BookId { get; set; }
 
         public Book Book { get; set; }
+
+        public DateTime DateBooking { get; set; }
     }
 }

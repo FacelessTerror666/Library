@@ -1,16 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Library.Models.Books
+namespace Library.Domain.Models.Books
 {
-    public class EditBookModel
+    public class BookModel
     {
-        public long Id { get; set; }
-
         [Display(Name = "Название")]
         public string Name { get; set; }
-
-        [Display(Name = "Читатель")]
-        public long ReaderId { get; set; }
 
         [Display(Name = "Автор")]
         public string Author { get; set; }
@@ -20,5 +15,8 @@ namespace Library.Models.Books
 
         [Display(Name = "Издательство")]
         public string Publisher { get; set; }
+
+        [Display(Name = "Описание")]
+        public string Description { get; set; }
     }
 }

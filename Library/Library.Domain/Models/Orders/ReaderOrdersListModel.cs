@@ -1,9 +1,9 @@
 ﻿using Library.Database.Entities;
 using System;
 
-namespace Library.Models.Orders
+namespace Library.Domain.Models.Orders
 {
-    public class AllOrdersListModel
+    public class ReaderOrdersListModel
     {
         public long Id { get; set; }
 
@@ -14,5 +14,7 @@ namespace Library.Models.Orders
         public long BookId { get; set; }
 
         public Book Book { get; set; }
+
+        public DateTime DateBooking { get; set; }
     }
 }
