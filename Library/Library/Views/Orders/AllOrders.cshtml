@@ -72,12 +72,12 @@
                         <div class="pull-right">
                             @if (User.IsInRole(RoleInitialize.Librarian))
                             {
-                                @if (item.BookStatus == Library.Database.Enums.BookStatus.Booked)
+                                @if (item.Book.BookStatus == Library.Database.Enums.BookStatus.Booked)
                                 {
                                     @Html.ActionLink("Выдать книгу", "GiveOutBook", new { id = item.Id })
                                 }
 
-                                @if (item.BookStatus == Library.Database.Enums.BookStatus.Given)
+                                @if (item.Book.BookStatus == Library.Database.Enums.BookStatus.Given)
                                 {
                                     @Html.ActionLink("Вернуть книгу", "ReturnBook", new { id = item.Id })
                                 }

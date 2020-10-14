@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Library.Database.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Library.Domain.Models.Books
 {
@@ -23,6 +24,6 @@ namespace Library.Domain.Models.Books
         public string Description { get; set; }
 
         [Display(Name = "Статус")]
-        public Database.Enums.BookStatus BookStatus { get; set; }
+        public BookStatus BookStatus { get; set; }
     }
 }

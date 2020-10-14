@@ -112,7 +112,8 @@ namespace Library.Domain.Services
                 Name = existingBook.Name,
                 Genre = existingBook.Genre,
                 Author = existingBook.Author,
-                Publisher = existingBook.Publisher
+                Publisher = existingBook.Publisher,
+                Description = existingBook.Description
             };
 
             return editModel;
@@ -128,6 +129,7 @@ namespace Library.Domain.Services
                 existingBook.Genre = model.Genre;
                 existingBook.Author = model.Author;
                 existingBook.Publisher = model.Publisher;
+                existingBook.Description = model.Description;
 
                 bookRepository.Update(existingBook);
             }

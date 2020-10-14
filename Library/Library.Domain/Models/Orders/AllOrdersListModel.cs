@@ -1,5 +1,5 @@
 ﻿using Library.Database.Entities;
-using Library.Domain.Models.Books;
+using Library.Database.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,9 +23,9 @@ namespace Library.Domain.Models.Orders
         public string Description { get; set; }
 
         [Display(Name = "Статус")]
-        public Database.Enums.BookStatus BookStatus { get; set; }
+        public BookStatus BookStatus { get; set; }
 
-        [Display(Name = "Дата")]
+        [Display(Name = "Дата снятия бронирования")]
         public DateTime DateBooking { get; set; }
 
         public long Id { get; set; }

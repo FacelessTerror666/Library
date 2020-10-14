@@ -20,5 +20,8 @@ namespace Library.Domain.Models.Books
 
         [Display(Name = "Издательство")]
         public string Publisher { get; set; }
+
+        [Display(Name = "Описание")]
+        public string Description { get; set; }
     }
 }
