@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Library.Database.Entities;
+using Library.Database.Enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Domain.Models.Books
 {
-    public class BooksListModel
+    public class BooksSearchModel
     {
         public long Id { get; set; }
 
@@ -21,9 +23,9 @@ namespace Library.Domain.Models.Books
         public string Publisher { get; set; }
 
         [Display(Name = "Статус")]
-        public Database.Enums.BookStatus BookStatus { get; set; }
+        public BookStatus BookStatus { get; set; }
 
-        public List<BooksListModel> Books { get; set; }
+        public List<Book> Books { get; set; }
 
         public SelectList Authors { get; set; }
 

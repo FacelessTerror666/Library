@@ -7,23 +7,23 @@ using System.Linq;
 
 namespace Library.Domain
 {
-    public class BookRepository<TEntity> : IBookRepository<TEntity>
+    public class Repository<TEntity> : IRepository<TEntity>
          where TEntity : class, IEntity
     {
         private readonly LibraryDbContext _context;
 
-        public BookRepository(LibraryDbContext context)
+        public Repository(LibraryDbContext context)
         {
             _context = context;
         }
 
-        public void CreateBook(TEntity entity)
+        public void Create(TEntity entity)
         {
             _context.Add(entity);
             _context.SaveChanges();
         }
 
-        public void DeleteBook(TEntity entity)
+        public void Delete(TEntity entity)
         {
             if (entity != null)
             {
@@ -32,7 +32,7 @@ namespace Library.Domain
             }
         }
 
-        public void DeleteBooks(IEnumerable<TEntity> entities)
+        public void Delete(IEnumerable<TEntity> entities)
         {
             if (entities.Count() > 0)
             {
@@ -41,17 +41,17 @@ namespace Library.Domain
             }
         }
 
-        public IQueryable<TEntity> GetBooks()
+        public IQueryable<TEntity> GetItems()
         {
             return _context.Set<TEntity>();
         }
 
-        public void UpdateBook(TEntity entity)
+        public void Update(TEntity entity)
         {
             _context.SaveChanges();
         }
 
-        public TEntity GetBook(long id)
+        public TEntity Get(long id)
         {
             return _context.Set<TEntity>().Find(id);
         }

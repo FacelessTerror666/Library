@@ -18,5 +18,8 @@ namespace Library.Domain.Models.Books
 
         [Display(Name = "Описание")]
         public string Description { get; set; }
+
+        [Display(Name = "Статус")]
+        public Database.Enums.BookStatus BookStatus { get; set; }
     }
 }

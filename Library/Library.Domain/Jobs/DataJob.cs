@@ -30,10 +30,10 @@ namespace Library.Domain.Jobs
                 using (var scope = serviceScopeFactory.CreateScope())
                 {
                     var authoCancel = scope.ServiceProvider.GetRequiredService<IAuthoCancel>();
-                    var orderRepository = scope.ServiceProvider.GetRequiredService<IOrderRepository<Order>>();
+                    var orderRepository = scope.ServiceProvider.GetRequiredService<IRepository<Order>>();
 
                     var now = DateTime.Now;
-                    var orders = orderRepository.GetOrders()
+                    var orders = orderRepository.GetItems()
                         .Where(x => x.DateBooking <= now)
                         .Where(x => x.Book.BookStatus == BookStatus.Booked)
                         .ToList();

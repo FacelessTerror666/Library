@@ -3,7 +3,9 @@ using Library.Database;
 using Library.Database.Entities;
 using Library.Database.Interfaces;
 using Library.Domain;
+using Library.Domain.Interfaces;
 using Library.Domain.Jobs;
+using Library.Domain.Services;
 using Library.Domain.Workers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,8 +37,9 @@ namespace Library
             services.AddTransient<DataJob>();
             services.AddTransient<IAuthoCancel, AuthoCancel>();
 
-            services.AddTransient(typeof(IBookRepository<>), typeof(BookRepository<>));
-            services.AddTransient(typeof(IOrderRepository<>), typeof(OrderRepository<>));
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IOrderService, OrderService>();
 
             services.AddIdentity<User, RoleInitialize>()
                 .AddEntityFrameworkStores<LibraryDbContext>();

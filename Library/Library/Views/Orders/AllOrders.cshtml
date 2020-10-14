@@ -22,19 +22,22 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Book.Name)
+                        @Html.DisplayNameFor(model => model.Name)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Book.Author)
+                        @Html.DisplayNameFor(model => model.Author)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Book.Genre)
+                        @Html.DisplayNameFor(model => model.Genre)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Book.Publisher)
+                        @Html.DisplayNameFor(model => model.Publisher)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Book.BookStatus)
+                        @Html.DisplayNameFor(model => model.BookStatus)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateBooking)
                     </th>
                     <th>
                     </th>
@@ -60,18 +63,21 @@
                         @Html.DisplayFor(modelItem => item.Book.BookStatus)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.DateBooking)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.User.UserName)
                     </td>
                     <td>
                         <div class="pull-right">
                             @if (User.IsInRole(RoleInitialize.Librarian))
                             {
-                                @if (item.Book.BookStatus == Library.Database.Enums.BookStatus.Booked)
+                                @if (item.BookStatus == Library.Database.Enums.BookStatus.Booked)
                                 {
                                     @Html.ActionLink("Выдать книгу", "GiveOutBook", new { id = item.Id })
                                 }
 
-                                @if (item.Book.BookStatus == Library.Database.Enums.BookStatus.Given)
+                                @if (item.BookStatus == Library.Database.Enums.BookStatus.Given)
                                 {
                                     @Html.ActionLink("Вернуть книгу", "ReturnBook", new { id = item.Id })
                                 }
