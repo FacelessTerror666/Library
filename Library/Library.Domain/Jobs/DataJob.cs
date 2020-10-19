@@ -1,7 +1,7 @@
 ﻿using Library.Database.Entities;
 using Library.Database.Enums;
 using Library.Database.Interfaces;
-using Library.Domain.Workers;
+using Library.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using System;

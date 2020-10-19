@@ -1,8 +1,9 @@
-﻿using Library.Database.Interfaces;
+﻿using Library.Database.Entities;
+using Library.Database.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
-namespace Library.Database.Entities
+namespace Library.Database
 {
     public class RoleInitialize : IdentityRole<long>, IEntity
     {

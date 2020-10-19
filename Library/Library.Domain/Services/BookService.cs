@@ -19,7 +19,7 @@ namespace Library.Domain.Services
             this.bookRepository = bookRepository;
         }
 
-        public async Task<BooksSearchModel> BooksSearchAsync(string bookAuthor, string bookGenre, 
+        public async Task<BooksSearchModel> BooksSearchAsync(string bookAuthor, string bookGenre,
             string bookPublisher, string searchString)
         {
             IQueryable<string> authorQuery = bookRepository.GetItems()
@@ -95,11 +95,33 @@ namespace Library.Domain.Services
                 Author = model.Author,
                 Genre = model.Genre,
                 Publisher = model.Publisher,
-                Description = model.Description,
-                BookStatus = model.BookStatus
+                Description = model.Description
             };
 
-            bookRepository.Create(book);
+            var books = bookRepository.GetItems().ToList();
+
+            var updateOrCreate = true;
+
+            foreach (var oldBook in books)
+            {
+                if (book.Name == oldBook.Name &
+                    book.Author == oldBook.Author &
+                    book.Genre == oldBook.Genre &
+                    book.Publisher == oldBook.Publisher &
+                    book.Description == oldBook.Description)
+                {
+                    updateOrCreate = false;
+
+                    oldBook.IsDeleted = false;
+
+                    bookRepository.Update(oldBook);
+                }
+            }
+
+            if (updateOrCreate)
+            { 
+                bookRepository.Create(book);
+            }
         }
 
         public EditBookModel EditBookGet(long id)
@@ -123,7 +145,7 @@ namespace Library.Domain.Services
         {
             var existingBook = bookRepository.Get(model.Id);
 
-            if (existingBook == null)
+            if (existingBook != null)
             {
                 existingBook.Name = model.Name;
                 existingBook.Genre = model.Genre;

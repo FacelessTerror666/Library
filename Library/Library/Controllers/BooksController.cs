@@ -47,6 +47,14 @@ namespace Library.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult EditBook(EditBookModel model)
+        {
+            bookService.EditBookPost(model);
+
+            return RedirectToAction(nameof(BooksList));
+        }
+
         [HttpGet]
         public ActionResult EditBook(long id)
         {
@@ -55,19 +63,10 @@ namespace Library.Controllers
             return View(editModel);
         }
 
-        [HttpPost]
-        public ActionResult EditBook(EditBookModel model)
-        {
-            bookService.EditBookPost(model);
-
-            return RedirectToAction(nameof(BooksList));
-
-        }
-
         [HttpGet]
         public ActionResult DeleteBook(long id)
         {
-            var existingBook = bookService.ViewBook(id);
+            bookService.DeleteBook(id);
 
             return RedirectToAction(nameof(BooksList));
         }

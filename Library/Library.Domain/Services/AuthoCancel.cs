@@ -2,8 +2,9 @@
 using Library.Database.Interfaces;
 using Quartz;
 using Library.Database.Enums;
+using Library.Domain.Interfaces;
 
-namespace Library.Domain.Workers
+namespace Library.Domain.Services
 {
     [DisallowConcurrentExecution]
     public class AuthoCancel : IAuthoCancel

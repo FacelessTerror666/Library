@@ -9,9 +9,6 @@ namespace Library.Domain.Models.Books
         [Display(Name = "Название")]
         public string Name { get; set; }
 
-        [Display(Name = "Читатель")]
-        public long ReaderId { get; set; }
-
         [Display(Name = "Автор")]
         public string Author { get; set; }
 

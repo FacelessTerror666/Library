@@ -1,4 +1,5 @@
 ﻿using Library.Database.Entities;
+using Library.Domain.Models.Roles;
 using Library.Domain.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Controllers
 {
-    [Authorize(Roles = RoleInitialize.Admin)]
+    [Authorize(Roles = RoleModel.Librarian)]
     public class UsersController : Controller
     {
         UserManager<User> _userManager;

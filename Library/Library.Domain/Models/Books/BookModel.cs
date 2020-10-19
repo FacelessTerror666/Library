@@ -19,8 +19,5 @@ namespace Library.Domain.Models.Books
 
         [Display(Name = "Описание")]
         public string Description { get; set; }
-
-        [Display(Name = "Статус")]
-        public BookStatus BookStatus { get; set; }
     }
 }

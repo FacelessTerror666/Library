@@ -1,9 +1,8 @@
-﻿using Library.Database;
-using Library.Database.Interfaces;
+﻿using Library.Database.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Library.Domain
+namespace Library.Database
 {
     public class Repository<TEntity> : IRepository<TEntity>
          where TEntity : class, IEntity

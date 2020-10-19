@@ -1,6 +1,6 @@
 ﻿using Library.Database.Entities;
 
-namespace Library.Domain.Workers
+namespace Library.Domain.Interfaces
 {
     public interface IAuthoCancel
     {
