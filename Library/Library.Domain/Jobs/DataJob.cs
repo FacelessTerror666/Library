@@ -27,7 +27,7 @@ namespace Library.Domain.Jobs
             {
                 using (var scope = serviceScopeFactory.CreateScope())
                 {
-                    var authoCancel = scope.ServiceProvider.GetRequiredService<IAuthoCancel>();
+                    var authoCancel = scope.ServiceProvider.GetRequiredService<IOrderService>();
                     var orderRepository = scope.ServiceProvider.GetRequiredService<IRepository<Order>>();
 
                     var now = DateTime.Now;
@@ -38,7 +38,7 @@ namespace Library.Domain.Jobs
 
                     foreach (var order in orders)
                     {
-                        authoCancel.CancelAutho(order);
+                        authoCancel.CancelReservation(order);
                     }
 
                     return Task.CompletedTask;

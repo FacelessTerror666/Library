@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Library.Database.Enums
 {
     public enum BookStatus
     {
         /// <summary>
-        /// Свободная
+        /// Свободна
         /// </summary>
-        [Display(Name = "Свободная")]
+        [Display(Name = "Свободна")]
         Free = 0,
 
         /// <summary>
-        /// Забронированная
+        /// Забронирована
         /// </summary>
-        [Display(Name = "Забронированная")]
+        [Display(Name = "Забронирована")]
         Booked = 10,
 
         /// <summary>
-        /// Выданная
+        /// Выдана
         /// </summary>
-        [Display(Name = "Выданная")]
+        [Display(Name = "Выдана")]
         Given = 20
     }
 }

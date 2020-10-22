@@ -17,5 +17,7 @@ namespace Library.Domain.Interfaces
         public void ReturnBook(long id);
 
         public void CancelReservation(long id);
+
+        public void CancelReservation(Order order);
     }
 }

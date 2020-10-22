@@ -1,4 +1,5 @@
-﻿using Library.Database.Interfaces;
+﻿using Library.Database.Enums;
+using Library.Database.Interfaces;
 using System;
 
 namespace Library.Database.Entities
@@ -16,5 +17,7 @@ namespace Library.Database.Entities
         public Book Book { get; set; }
 
         public DateTime DateBooking { get; set; }
+
+        public OrderStatus OrderStatus { get; set; }
     }
 }

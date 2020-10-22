@@ -21,7 +21,6 @@ namespace Library.Controllers
             string bookPublisher, string searchString)
         {
             var bookSearch = await bookService.BooksSearchAsync(bookAuthor, bookGenre, bookPublisher, searchString);
-
             return View(bookSearch);
         }
 
@@ -29,7 +28,6 @@ namespace Library.Controllers
         public ActionResult ViewBook(long id)
         {
             var model = bookService.ViewBook(id);
-
             return View(model);
         }
 
@@ -37,7 +35,6 @@ namespace Library.Controllers
         public ActionResult CreateBook(BookModel model)
         {
             bookService.CreateBook(model);
-
             return RedirectToAction(nameof(BooksList));
         }
 
@@ -51,7 +48,6 @@ namespace Library.Controllers
         public ActionResult EditBook(EditBookModel model)
         {
             bookService.EditBookPost(model);
-
             return RedirectToAction(nameof(BooksList));
         }
 
@@ -59,7 +55,6 @@ namespace Library.Controllers
         public ActionResult EditBook(long id)
         {
             var editModel = bookService.EditBookGet(id);
-
             return View(editModel);
         }
 
@@ -67,7 +62,6 @@ namespace Library.Controllers
         public ActionResult DeleteBook(long id)
         {
             bookService.DeleteBook(id);
-
             return RedirectToAction(nameof(BooksList));
         }
 

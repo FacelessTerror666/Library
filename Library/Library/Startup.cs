@@ -33,7 +33,6 @@ namespace Library
 
             services.AddTransient<JobFactory>();
             services.AddTransient<DataJob>();
-            services.AddTransient<IAuthoCancel, AuthoCancel>();
 
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IBookService, BookService>();
@@ -78,17 +77,17 @@ namespace Library
                      .CreateScope();
 
             var services = serviceScope.ServiceProvider;
-                try
-                {
-                    var userManager = services.GetRequiredService<UserManager<User>>();
-                    var rolesManager = services.GetRequiredService<RoleManager<RoleInitialize>>();
-                    await RoleInitialize.InitializeAsync(userManager, rolesManager);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while seeding the database.");
-                }
+            try
+            {
+                var userManager = services.GetRequiredService<UserManager<User>>();
+                var rolesManager = services.GetRequiredService<RoleManager<RoleInitialize>>();
+                await RoleInitialize.InitializeAsync(userManager, rolesManager);
+            }
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred while seeding the database.");
+            }
 
             DataScheduler.Start(serviceScope.ServiceProvider);
         }

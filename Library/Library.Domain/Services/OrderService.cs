@@ -31,7 +31,8 @@ namespace Library.Domain.Services
                 BookId = book.Id,
                 UserId = user.Id,
                 User = user,
-                DateBooking = DateTime.Now.AddDays(7)
+                DateBooking = DateTime.Now.AddMinutes(1)/*Days(7)*/,
+                OrderStatus = OrderStatus.Booked
             };
 
             orderRepository.Create(order);
@@ -47,6 +48,7 @@ namespace Library.Domain.Services
             var orders = orderRepository.GetItems()
                 .Include(x => x.Book)
                 .Where(x => x.UserId == userId)
+                .Where(x => x.OrderStatus == OrderStatus.Booked || x.OrderStatus == OrderStatus.Given)
                 .Where(x => x.Book.IsDeleted == false)
                 .OrderBy(x => x.Book.Name)
                 .Select(x => new ReaderOrdersListModel
@@ -56,7 +58,7 @@ namespace Library.Domain.Services
                     User = x.User,
                     BookId = x.BookId,
                     Book = x.Book,
-                    DateBooking = x.DateBooking
+                    DateBooking = x.DateBooking,
                 })
                 .ToList();
 
@@ -66,7 +68,8 @@ namespace Library.Domain.Services
         public IEnumerable<AllOrdersListModel> AllOrders()
         {
             var anyOrders = orderRepository.GetItems()
-               .Include(x => x.Book)
+                .Include(x => x.Book)
+                .Where(x => x.OrderStatus == OrderStatus.Booked || x.OrderStatus == OrderStatus.Given)
                 .Where(x => x.Book.IsDeleted == false)
                 .OrderBy(x => x.Book.Name)
                 .Select(x => new AllOrdersListModel
@@ -76,7 +79,7 @@ namespace Library.Domain.Services
                     User = x.User,
                     BookId = x.BookId,
                     Book = x.Book,
-                    DateBooking = x.DateBooking
+                    DateBooking = x.DateBooking,
                 })
                 .ToList();
 
@@ -88,8 +91,10 @@ namespace Library.Domain.Services
             var order = orderRepository.Get(id);
             var bookId = order.BookId;
             var book = bookRepository.Get(bookId);
-            book.BookStatus = BookStatus.Given;
+            order.OrderStatus = OrderStatus.Given;
             orderRepository.Update(order);
+            book.BookStatus = BookStatus.Given;
+            bookRepository.Update(book);
         }
 
         public void ReturnBook(long id)
@@ -97,8 +102,10 @@ namespace Library.Domain.Services
             var order = orderRepository.Get(id);
             var bookId = order.BookId;
             var book = bookRepository.Get(bookId);
+            order.OrderStatus = OrderStatus.Returned;
+            orderRepository.Update(order);
             book.BookStatus = BookStatus.Free;
-            orderRepository.Delete(order);
+            bookRepository.Update(book);
         }
 
         public void CancelReservation(long id)
@@ -106,9 +113,20 @@ namespace Library.Domain.Services
             var order = orderRepository.Get(id);
             var bookId = order.BookId;
             var book = bookRepository.Get(bookId);
+            order.OrderStatus = OrderStatus.Cancelled;
+            orderRepository.Update(order);
             book.BookStatus = BookStatus.Free;
-            orderRepository.Delete(order);
+            bookRepository.Update(book);
         }
 
+        public void CancelReservation(Order order)
+        {
+            var bookId = order.BookId;
+            var book = bookRepository.Get(bookId);
+            order.OrderStatus = OrderStatus.Cancelled;
+            orderRepository.Update(order);
+            book.BookStatus = BookStatus.Free;
+            bookRepository.Update(book);
+        }
     }
 }

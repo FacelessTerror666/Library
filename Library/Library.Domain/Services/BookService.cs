@@ -22,20 +22,20 @@ namespace Library.Domain.Services
         public async Task<BooksSearchModel> BooksSearchAsync(string bookAuthor, string bookGenre,
             string bookPublisher, string searchString)
         {
-            IQueryable<string> authorQuery = bookRepository.GetItems()
-                                             .Where(x => x.IsDeleted == false)
-                                             .OrderBy(x => x.Author)
-                                             .Select(x => x.Author);
+            var authorQuery = bookRepository.GetItems()
+                .Where(x => x.IsDeleted == false)
+                .OrderBy(x => x.Author)
+                .Select(x => x.Author);
 
-            IQueryable<string> genreQuery = bookRepository.GetItems()
-                                             .Where(x => x.IsDeleted == false)
-                                             .OrderBy(x => x.Genre)
-                                             .Select(x => x.Genre);
+            var genreQuery = bookRepository.GetItems()
+                .Where(x => x.IsDeleted == false)
+                .OrderBy(x => x.Genre)
+                .Select(x => x.Genre);
 
-            IQueryable<string> publisherQuery = bookRepository.GetItems()
-                                             .Where(x => x.IsDeleted == false)
-                                             .OrderBy(x => x.Publisher)
-                                             .Select(x => x.Publisher);
+            var publisherQuery = bookRepository.GetItems()
+                .Where(x => x.IsDeleted == false)
+                .OrderBy(x => x.Publisher)
+                .Select(x => x.Publisher);
 
             var books = bookRepository.GetItems().Where(x => x.IsDeleted == false);
 
@@ -111,9 +111,7 @@ namespace Library.Domain.Services
                     book.Description == oldBook.Description)
                 {
                     updateOrCreate = false;
-
                     oldBook.IsDeleted = false;
-
                     bookRepository.Update(oldBook);
                 }
             }
@@ -152,7 +150,6 @@ namespace Library.Domain.Services
                 existingBook.Author = model.Author;
                 existingBook.Publisher = model.Publisher;
                 existingBook.Description = model.Description;
-
                 bookRepository.Update(existingBook);
             }
         }

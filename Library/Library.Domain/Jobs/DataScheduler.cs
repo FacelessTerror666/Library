@@ -18,9 +18,9 @@ namespace Library.Domain.Jobs
             IJobDetail jobDetail = JobBuilder.Create<DataJob>().Build();
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("MailingTrigger", "default")
-                .StartAt(DateTimeOffset.Now.AddMinutes(5))
+                .StartAt(DateTimeOffset.Now/*.AddMinutes(5)*/)
                 .WithSimpleSchedule(x => x
-                .WithIntervalInHours(12)
+                .WithIntervalInMinutes(1)/*InHours(12)*/
                 .RepeatForever())
                 .Build();
 

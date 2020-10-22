@@ -22,7 +22,6 @@ namespace Library.Controllers
         public async Task<IActionResult> Reservation(long id)
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
-
             orderService.Reservation(id, user);
 
             return RedirectToAction(nameof(ReaderOrders));
@@ -42,7 +41,6 @@ namespace Library.Controllers
         public IActionResult AllOrders()
         {
             var anyOrders = orderService.AllOrders();
-
             return View(anyOrders);
         }
 
@@ -50,7 +48,6 @@ namespace Library.Controllers
         public ActionResult GiveOutBook(long id)
         {
             orderService.GiveOutBook(id);
-
             return RedirectToAction(nameof(AllOrders));
         }
 
@@ -58,7 +55,6 @@ namespace Library.Controllers
         public ActionResult ReturnBook(long id)
         {
             orderService.ReturnBook(id);
-
             return RedirectToAction(nameof(AllOrders));
         }
 
@@ -66,7 +62,6 @@ namespace Library.Controllers
         public ActionResult CancelReservation(long id)
         {
             orderService.CancelReservation(id);
-
             return RedirectToAction(nameof(ReaderOrders));
         }
 
