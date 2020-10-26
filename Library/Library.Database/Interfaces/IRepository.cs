@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace Library.Database.Interfaces
 {
@@ -14,7 +11,7 @@ namespace Library.Database.Interfaces
 
         void Delete(TEntity entity);
 
-        void Delete(IEnumerable<TEntity> entities);
+        //void Delete(IEnumerable<TEntity> entities);
 
         IQueryable<TEntity> GetItems();
 

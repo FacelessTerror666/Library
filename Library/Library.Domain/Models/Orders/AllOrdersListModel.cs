@@ -1,6 +1,7 @@
 ﻿using Library.Database.Entities;
 using Library.Database.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Domain.Models.Orders
@@ -18,9 +19,6 @@ namespace Library.Domain.Models.Orders
 
         [Display(Name = "Издательство")]
         public string Publisher { get; set; }
-
-        [Display(Name = "Описание")]
-        public string Description { get; set; }
 
         [Display(Name = "Статус")]
         public BookStatus BookStatus { get; set; }

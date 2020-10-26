@@ -1,5 +1,4 @@
 ﻿using Library.Database.Interfaces;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Library.Database
@@ -29,14 +28,14 @@ namespace Library.Database
             }
         }
 
-        public void Delete(IEnumerable<TEntity> entities)
-        {
-            if (entities.Count() > 0)
-            {
-                _context.RemoveRange(entities);
-                _context.SaveChanges();
-            }
-        }
+        //public void Delete(IEnumerable<TEntity> entities)
+        //{
+        //    if (entities.Count() > 0)
+        //    {
+        //        _context.RemoveRange(entities);
+        //        _context.SaveChanges();
+        //    }
+        //}
 
         public IQueryable<TEntity> GetItems()
         {

@@ -7,8 +7,13 @@
 {
     <p>@User.Identity.Name</p>
 
+    
     <form method="get" asp-controller="Books" asp-action="BooksList">
-        <input type="submit" value="Библиотека"/>
+        <input type="submit" value="Библиотека" />
+    </form>
+
+    <form method="get" asp-controller="Users" asp-action="Index">
+        <input type="submit" value="Список пользователей" />
     </form>
 
     <form method="post" asp-controller="Account" asp-action="Logout">

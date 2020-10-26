@@ -2,7 +2,7 @@
 
 namespace Library.Domain.Models.Account
 {
-    public class LoginModel
+    public class LoginModel 
     {
         [Required]
         [Display(Name = "Email")]

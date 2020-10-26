@@ -4,6 +4,8 @@ namespace Library.Domain.Models.Account
 {
     public class RegisterModel
     {
+        public long Id { get; set; }
+
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -17,6 +19,7 @@ namespace Library.Domain.Models.Account
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         [DataType(DataType.Password)]
         [Display(Name = "Подтвердить пароль")]
+
         public string PasswordConfirm { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Library.Database.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Library.Domain.Models.Books
 {

@@ -37,6 +37,7 @@ namespace Library
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddIdentity<User, RoleInitialize>()
                 .AddEntityFrameworkStores<LibraryDbContext>();
@@ -89,7 +90,7 @@ namespace Library
                 logger.LogError(ex, "An error occurred while seeding the database.");
             }
 
-            DataScheduler.Start(serviceScope.ServiceProvider);
+            DataScheduler.Start(services);
         }
     }
 }

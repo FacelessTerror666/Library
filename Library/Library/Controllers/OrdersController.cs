@@ -23,7 +23,6 @@ namespace Library.Controllers
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
             orderService.Reservation(id, user);
-
             return RedirectToAction(nameof(ReaderOrders));
         }
 
@@ -33,7 +32,6 @@ namespace Library.Controllers
             var user = await userManager.GetUserAsync(HttpContext.User);
             var userId = user.Id;
             var orders = orderService.ReaderOrders(userId);
-
             return View(orders);
         }
 

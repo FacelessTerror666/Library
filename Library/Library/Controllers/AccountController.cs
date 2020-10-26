@@ -1,22 +1,17 @@
-﻿using Library.Database.Entities;
+﻿using Library.Domain.Interfaces;
 using Library.Domain.Models.Account;
-using Library.Domain.Models.Roles;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Library.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly IUserService userService;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(IUserService userService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -30,14 +25,12 @@ namespace Library.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email };
-                // добавляем пользователя
-                var result = await _userManager.CreateAsync(user, model.Password);
-                await _userManager.AddToRolesAsync(user, new List<string> { RoleModel.Reader });
+                var result = await userService.RegisterAsync(model);
+
                 if (result.Succeeded)
                 {
-                    // установка куки
-                    await _signInManager.SignInAsync(user, false);
+                    var userModel = await userService.GetUserModelByEmail(model.Email);
+                    await userService.SignInAsync(userModel);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -63,7 +56,7 @@ namespace Library.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var result = await userService.PasswordSignInAsync(model);
                 if (result.Succeeded)
                 {
                     // проверяем, принадлежит ли URL приложению
@@ -89,7 +82,7 @@ namespace Library.Controllers
         public async Task<IActionResult> Logout()
         {
             // удаляем аутентификационные куки
-            await _signInManager.SignOutAsync();
+            await userService.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }
