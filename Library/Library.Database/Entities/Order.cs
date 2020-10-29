@@ -18,6 +18,8 @@ namespace Library.Database.Entities
 
         public DateTime DateBooking { get; set; }
 
+        public DateTime DateReturned { get; set; }
+
         public OrderStatus OrderStatus { get; set; }
     }
 }

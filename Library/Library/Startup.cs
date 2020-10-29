@@ -38,6 +38,7 @@ namespace Library
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IReportService, ReportService>();
 
             services.AddIdentity<User, RoleInitialize>()
                 .AddEntityFrameworkStores<LibraryDbContext>();

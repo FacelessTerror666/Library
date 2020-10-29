@@ -31,11 +31,12 @@ namespace Library.Domain.Services
                 BookId = book.Id,
                 UserId = user.Id,
                 User = user,
-                DateBooking = DateTime.Now.AddMinutes(1)/*Days(7)*/,
+                DateBooking = DateTime.Now,
+                DateReturned = DateTime.Now.AddMinutes(2)/*Days(7)*/,
                 OrderStatus = OrderStatus.Booked
             };
-
             orderRepository.Create(order);
+
             if (book.BookStatus == BookStatus.Free)
             {
                 book.BookStatus = BookStatus.Booked;
@@ -43,7 +44,7 @@ namespace Library.Domain.Services
             bookRepository.Update(book);
         }
 
-        public IEnumerable<ReaderOrdersListModel> ReaderOrders(long userId)
+        public IEnumerable<ReaderOrdersModel> ReaderOrders(long userId)
         {
             var orders = orderRepository.GetItems()
                 .Include(x => x.Book)
@@ -51,35 +52,35 @@ namespace Library.Domain.Services
                 .Where(x => x.OrderStatus == OrderStatus.Booked || x.OrderStatus == OrderStatus.Given)
                 .Where(x => x.Book.IsDeleted == false)
                 .OrderBy(x => x.Book.Name)
-                .Select(x => new ReaderOrdersListModel
+                .Select(x => new ReaderOrdersModel
                 {
                     Id = x.Id,
                     UserId = x.UserId,
                     User = x.User,
                     BookId = x.BookId,
                     Book = x.Book,
-                    DateBooking = x.DateBooking,
+                    DateReturned = x.DateReturned,
                 })
                 .ToList();
 
             return orders;
         }
 
-        public IEnumerable<AllOrdersListModel> AllOrders()
+        public IEnumerable<AllOrdersModel> AllOrders()
         {
             var anyOrders = orderRepository.GetItems()
                 .Include(x => x.Book)
                 .Where(x => x.OrderStatus == OrderStatus.Booked || x.OrderStatus == OrderStatus.Given)
                 .Where(x => x.Book.IsDeleted == false)
                 .OrderBy(x => x.Book.Name)
-                .Select(x => new AllOrdersListModel
+                .Select(x => new AllOrdersModel
                 {
                     Id = x.Id,
                     UserId = x.UserId,
                     User = x.User,
                     BookId = x.BookId,
                     Book = x.Book,
-                    DateBooking = x.DateBooking,
+                    DateReturned = x.DateReturned,
                 })
                 .ToList();
 
@@ -91,10 +92,13 @@ namespace Library.Domain.Services
             var order = orderRepository.Get(id);
             var bookId = order.BookId;
             var book = bookRepository.Get(bookId);
-            order.OrderStatus = OrderStatus.Given;
-            orderRepository.Update(order);
+            if (book.BookStatus == BookStatus.Booked)
+            {
+                order.OrderStatus = OrderStatus.Given;
+            }
             book.BookStatus = BookStatus.Given;
             bookRepository.Update(book);
+            orderRepository.Update(order);
         }
 
         public void ReturnBook(long id)
@@ -102,10 +106,14 @@ namespace Library.Domain.Services
             var order = orderRepository.Get(id);
             var bookId = order.BookId;
             var book = bookRepository.Get(bookId);
-            order.OrderStatus = OrderStatus.Returned;
-            orderRepository.Update(order);
+            if (book.BookStatus == BookStatus.Given)
+            {
+                order.OrderStatus = OrderStatus.Returned;
+                order.DateReturned = DateTime.Now;
+            }
             book.BookStatus = BookStatus.Free;
             bookRepository.Update(book);
+            orderRepository.Update(order);
         }
 
         public void CancelReservation(long id)
@@ -113,20 +121,28 @@ namespace Library.Domain.Services
             var order = orderRepository.Get(id);
             var bookId = order.BookId;
             var book = bookRepository.Get(bookId);
-            order.OrderStatus = OrderStatus.Cancelled;
-            orderRepository.Update(order);
+            if (book.BookStatus == BookStatus.Booked)
+            {
+                order.OrderStatus = OrderStatus.Cancelled;
+                order.DateReturned = DateTime.Now;
+            }
             book.BookStatus = BookStatus.Free;
             bookRepository.Update(book);
+            orderRepository.Update(order);
         }
 
-        public void CancelReservation(Order order)
+        public void AuthoCancelReservation(Order order)
         {
             var bookId = order.BookId;
             var book = bookRepository.Get(bookId);
-            order.OrderStatus = OrderStatus.Cancelled;
-            orderRepository.Update(order);
+            if (book.BookStatus == BookStatus.Booked)
+            {
+                order.OrderStatus = OrderStatus.Cancelled;
+                order.DateReturned = DateTime.Now;
+            }
             book.BookStatus = BookStatus.Free;
             bookRepository.Update(book);
+            orderRepository.Update(order);
         }
     }
 }

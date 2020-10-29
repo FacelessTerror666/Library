@@ -1,5 +1,5 @@
 ﻿@using Library.Domain.Models.Roles
-@model IEnumerable<Library.Domain.Models.Orders.AllOrdersListModel>
+@model IEnumerable<Library.Domain.Models.Orders.AllOrdersModel>
 
 
 @{
@@ -37,7 +37,7 @@
                         @Html.DisplayNameFor(model => model.BookStatus)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DateBooking)
+                        @Html.DisplayNameFor(model => model.DateReturned)
                     </th>
                     <th>
                     </th>
@@ -63,7 +63,7 @@
                         @Html.DisplayFor(modelItem => item.Book.BookStatus)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateBooking)
+                        @Html.DisplayFor(modelItem => item.DateReturned)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.User.UserName)

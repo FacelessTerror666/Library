@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Library.Domain.Models.Roles
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,14 +8,24 @@
 {
     <p>@User.Identity.Name</p>
 
-    
+
     <form method="get" asp-controller="Books" asp-action="BooksList">
         <input type="submit" value="Библиотека" />
     </form>
 
-    <form method="get" asp-controller="Users" asp-action="Index">
-        <input type="submit" value="Список пользователей" />
-    </form>
+    @if (User.IsInRole(RoleModel.Librarian))
+    {
+        <form method="post" asp-controller="Reports" asp-action="ReportIndex">
+            <input type="submit" value="Отчеты" />
+        </form>
+    }
+
+    @if (User.IsInRole(RoleModel.Admin))
+    {
+        <form method="get" asp-controller="Users" asp-action="Index">
+            <input type="submit" value="Список пользователей" />
+        </form>
+    }
 
     <form method="post" asp-controller="Account" asp-action="Logout">
         <input type="submit" value="Выход" />

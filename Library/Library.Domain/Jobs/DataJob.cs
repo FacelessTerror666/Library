@@ -32,13 +32,14 @@ namespace Library.Domain.Jobs
 
                     var now = DateTime.Now;
                     var orders = orderRepository.GetItems()
-                        .Where(x => x.DateBooking <= now)
-                        .Where(x => x.Book.BookStatus == BookStatus.Booked)
+                        .Where(x => x.DateReturned <= now)
+                        .Where(x => x.OrderStatus == OrderStatus.Booked || x.OrderStatus == OrderStatus.Given)
+                        .Where(x => x.Book.BookStatus == BookStatus.Booked || x.Book.BookStatus == BookStatus.Given)
                         .ToList();
 
                     foreach (var order in orders)
                     {
-                        authoCancel.CancelReservation(order);
+                        authoCancel.AuthoCancelReservation(order);
                     }
 
                     return Task.CompletedTask;

@@ -8,9 +8,9 @@ namespace Library.Domain.Interfaces
     {
         public void Reservation(long id, User user);
 
-        public IEnumerable<ReaderOrdersListModel> ReaderOrders(long userId);
+        public IEnumerable<ReaderOrdersModel> ReaderOrders(long userId);
 
-        public IEnumerable<AllOrdersListModel> AllOrders();
+        public IEnumerable<AllOrdersModel> AllOrders();
 
         public void GiveOutBook(long id);
 
@@ -18,6 +18,6 @@ namespace Library.Domain.Interfaces
 
         public void CancelReservation(long id);
 
-        public void CancelReservation(Order order);
+        public void AuthoCancelReservation(Order order);
     }
 }

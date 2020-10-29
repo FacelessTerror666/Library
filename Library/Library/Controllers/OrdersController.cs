@@ -62,6 +62,5 @@ namespace Library.Controllers
             orderService.CancelReservation(id);
             return RedirectToAction(nameof(ReaderOrders));
         }
-
     }
 }

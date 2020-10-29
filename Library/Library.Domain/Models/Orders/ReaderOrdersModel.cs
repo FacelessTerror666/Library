@@ -1,12 +1,11 @@
 ﻿using Library.Database.Entities;
 using Library.Database.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Domain.Models.Orders
 {
-    public class AllOrdersListModel
+    public class ReaderOrdersModel
     {
         [Display(Name = "Название")]
         public string Name { get; set; }
@@ -23,8 +22,8 @@ namespace Library.Domain.Models.Orders
         [Display(Name = "Статус")]
         public BookStatus BookStatus { get; set; }
 
-        [Display(Name = "Дата снятия бронирования")]
-        public DateTime DateBooking { get; set; }
+        [Display(Name = "Дата автоматического снятия бронирования")]
+        public DateTime DateReturned { get; set; }
 
         public long Id { get; set; }
 
