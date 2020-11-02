@@ -4,7 +4,10 @@ using Library.Database.Interfaces;
 using Library.Domain.Interfaces;
 using Library.Domain.Models.Orders;
 using Microsoft.EntityFrameworkCore;
+using NPOI.XSSF.UserModel;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +23,7 @@ namespace Library.Domain.Services
             this.bookRepository = bookRepository;
             this.orderRepository = orderRepository;
         }
-  
+
         public async Task<OrdersListModel> ReportSearchAsync(string orderStatus, int timeReport)
         {
             var orders = orderRepository.GetItems();
@@ -61,6 +64,90 @@ namespace Library.Domain.Services
             };
 
             return orderSearchVM;
+        }
+
+        public void SaveReport(List<Order> orders)
+        {
+            //Рабочая книга Excel
+            XSSFWorkbook wb;
+            //Лист в книге Excel
+            XSSFSheet sh;
+
+            //Создаем рабочую книгу
+            wb = new XSSFWorkbook();
+            //Создаём лист в книге
+            sh = (XSSFSheet)wb.CreateSheet("Лист 1");
+
+            //Заполняемые строки
+            var rows = new List<string> {
+            "Название книги","Имя клиента","Статус","Дата бронирования",
+            "Дата снятия бронирования"
+            };
+
+            var i = 1;
+            var j = 0;
+
+            //Создаем строку c заголовками
+            var currentRow = sh.CreateRow(0);
+            foreach (var row in rows)
+            {
+                //в строке создаём ячеёку с указанием столбца
+                var currentCell = currentRow.CreateCell(j);
+                //в ячейку запишем заголовок
+                currentCell.SetCellValue(row);
+                //Выравним размер столбца по содержимому
+                sh.AutoSizeColumn(j);
+                j++;
+            }
+
+            //Запускаем цикл по строке
+            foreach (var order in orders)
+            {
+                //Создаем строку
+                var currentRoww = sh.CreateRow(i);
+
+                var currentCell = currentRoww.CreateCell(0);//в строке создаём ячеqку с указанием столбца
+                currentCell.SetCellValue(order.Book.Name);//в ячейку запишем информацию
+
+                currentCell = currentRoww.CreateCell(1);
+                currentCell.SetCellValue(order.User.UserName);
+
+                currentCell = currentRoww.CreateCell(2);
+                switch (order.OrderStatus)
+                {
+                    case OrderStatus.Booked:
+                        currentCell.SetCellValue("Забронирован");
+                        break;
+                    case OrderStatus.Given:
+                        currentCell.SetCellValue("Выдан");
+                        break;
+                    case OrderStatus.Cancelled:
+                        currentCell.SetCellValue("Отменён");
+                        break;
+                    case OrderStatus.Returned:
+                        currentCell.SetCellValue("Возвращен");
+                        break;
+                }
+
+                currentCell = currentRoww.CreateCell(3);
+                currentCell.SetCellValue(order.DateBooking);
+
+                currentCell = currentRoww.CreateCell(4);
+                currentCell.SetCellValue(order.DateReturned);
+
+                //Выравним размер столбца по содержимому
+                sh.AutoSizeColumn(j);
+                i++;
+            }
+            var rnd = new Random();
+            int value = rnd.Next();
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/" + value + ".xlsx";
+
+            //запишем всё в файл
+            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                wb.Write(fs);
+            }
         }
     }
 }
