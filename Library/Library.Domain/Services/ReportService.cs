@@ -15,12 +15,10 @@ namespace Library.Domain.Services
 {
     public class ReportService : IReportService
     {
-        private readonly IRepository<Book> bookRepository;
         private readonly IRepository<Order> orderRepository;
 
-        public ReportService(IRepository<Book> bookRepository, IRepository<Order> orderRepository)
+        public ReportService(IRepository<Order> orderRepository)
         {
-            this.bookRepository = bookRepository;
             this.orderRepository = orderRepository;
         }
 
@@ -66,7 +64,7 @@ namespace Library.Domain.Services
             return orderSearchVM;
         }
 
-        public void SaveReport(List<Order> orders)
+        public string SaveReport(List<Order> orders)
         {
             //Рабочая книга Excel
             XSSFWorkbook wb;
@@ -130,24 +128,23 @@ namespace Library.Domain.Services
                 }
 
                 currentCell = currentRoww.CreateCell(3);
-                currentCell.SetCellValue(order.DateBooking);
+                currentCell.SetCellValue(order.DateBooking.ToString());
 
                 currentCell = currentRoww.CreateCell(4);
-                currentCell.SetCellValue(order.DateReturned);
+                currentCell.SetCellValue(order.DateReturned.ToString());
 
                 //Выравним размер столбца по содержимому
                 sh.AutoSizeColumn(j);
                 i++;
             }
-            var rnd = new Random();
-            int value = rnd.Next();
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/" + value + ".xlsx";
+            var dateTime = DateTime.Now.ToString();
+            var path = "wwwroot/files/Reports/Отчёт.xlsx";
 
             //запишем всё в файл
-            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                wb.Write(fs);
-            }
+            var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
+            wb.Write(fs);
+
+            return path;
         }
     }
 }

@@ -2,9 +2,7 @@
 using Library.Domain.Models.Account;
 using Library.Domain.Models.Users;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Library.Domain.Interfaces

@@ -16,6 +16,10 @@
     <ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\files\Reports\" />
+  </ItemGroup>
+
 
 
 </Project>

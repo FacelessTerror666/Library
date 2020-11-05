@@ -9,6 +9,6 @@ namespace Library.Domain.Interfaces
     {
         public Task<OrdersListModel> ReportSearchAsync(string orderStatus, int timeReport);
 
-        public void SaveReport(List<Order> orders);
+        public string SaveReport(List<Order> orders);
     }
 }
