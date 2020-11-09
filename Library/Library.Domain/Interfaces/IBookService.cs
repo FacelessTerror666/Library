@@ -10,11 +10,11 @@ namespace Library.Domain.Interfaces
 
         public BookViewModel ViewBook(long id);
 
-        public void CreateBook(BookModel model);
+        public void CreateBook(BookModel model, string path, string uploadedFileName);
 
         public EditBookModel EditBookGet(long id);
 
-        public void EditBookPost(EditBookModel model);
+        public void EditBookPost(EditBookModel model, string path, string uploadedFileName);
 
         public void DeleteBook(long id);
     }

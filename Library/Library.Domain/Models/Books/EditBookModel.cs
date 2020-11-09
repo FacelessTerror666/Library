@@ -20,5 +20,9 @@ namespace Library.Domain.Models.Books
 
         [Display(Name = "Описание")]
         public string Description { get; set; }
+
+        public string Img { get; set; }
+
+        public string ImgPath { get; set; }
     }
 }

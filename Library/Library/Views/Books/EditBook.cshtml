@@ -1,7 +1,7 @@
 ﻿@model Library.Domain.Models.Books.EditBookModel
 
 @{
-    ViewData["Title"] = "EditTask";
+    ViewData["Title"] = "EditBook";
 }
 
 <div class="col-xs-6 col-xs-offset-3">
@@ -10,7 +10,7 @@
             <h3 class="panel-title">Изменить</h3>
         </div>
         <div class="panel-body">
-            <form asp-action="EditBook" asp-controller="Books" asp-anti-forgery="true">
+            <form asp-action="EditBook" asp-controller="Books" asp-anti-forgery="true" method="post" enctype="multipart/form-data">
                 <div class="validation" asp-validation-summary="ModelOnly"></div>
                 <div>
                     <input type="hidden" value="@Model.Id" name="bookId" class="form-control" />
@@ -39,8 +39,12 @@
                         <textarea type="text" class="form-control" asp-for="Description"></textarea>
                         <span asp-validation-for="Description" />
                     </div>
+                    <div class="form-group">
+                        <label class="control-label">Обложка книги</label>
+                        <input type="file" name="uploadedFile" /><br>
+                    </div>
                     <div>
-                        <input type="submit" value="Готово" class="btn btn-default" />
+                        <input type="submit" value="Сохранить изменения" class="btn btn-default" />
                     </div>
                 </div>
             </form>

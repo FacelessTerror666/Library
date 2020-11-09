@@ -4,6 +4,8 @@ namespace Library.Domain.Models.Books
 {
     public class BookModel
     {
+        public long Id { get; set; }
+
         [Display(Name = "Название")]
         public string Name { get; set; }
 
@@ -18,5 +20,9 @@ namespace Library.Domain.Models.Books
 
         [Display(Name = "Описание")]
         public string Description { get; set; }
+
+        public string Img { get; set; }
+
+        public string ImgPath { get; set; }
     }
 }

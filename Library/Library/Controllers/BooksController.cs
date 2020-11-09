@@ -1,7 +1,9 @@
 ﻿using Library.Domain.Interfaces;
 using Library.Domain.Models.Books;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Library.Controllers
@@ -32,9 +34,20 @@ namespace Library.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateBook(BookModel model)
+        public async Task<ActionResult> CreateBook(BookModel model, IFormFile uploadedFile)
         {
-            bookService.CreateBook(model);
+            if (uploadedFile != null)
+            {
+                var uploadedFileName = uploadedFile.FileName;
+                var path = "/Files/" + uploadedFileName;
+
+                using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+
+                bookService.CreateBook(model, path, uploadedFileName);
+            }
             return RedirectToAction(nameof(BooksList));
         }
 
@@ -45,9 +58,20 @@ namespace Library.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditBook(EditBookModel model)
+        public async Task<ActionResult> EditBook(EditBookModel model, IFormFile uploadedFile)
         {
-            bookService.EditBookPost(model);
+            if (uploadedFile != null)
+            {
+                var uploadedFileName = uploadedFile.FileName;
+                var path = "/Files/" + uploadedFileName;
+
+                using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+
+                bookService.EditBookPost(model, path, uploadedFileName);
+            }
             return RedirectToAction(nameof(BooksList));
         }
 

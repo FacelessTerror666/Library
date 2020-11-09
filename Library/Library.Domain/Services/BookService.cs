@@ -73,7 +73,6 @@ namespace Library.Domain.Services
         public BookViewModel ViewBook(long id)
         {
             var existingBook = bookRepository.Get(id);
-
             var viewModel = new BookViewModel
             {
                 Id = existingBook.Id,
@@ -82,12 +81,14 @@ namespace Library.Domain.Services
                 Genre = existingBook.Genre,
                 Publisher = existingBook.Publisher,
                 Description = existingBook.Description,
+                Img = existingBook.Img,
+                ImgPath = existingBook.ImgPath,
                 BookStatus = existingBook.BookStatus
             };
             return viewModel;
         }
 
-        public void CreateBook(BookModel model)
+        public void CreateBook(BookModel model, string path, string uploadedFileName)
         {
             var book = new Book
             {
@@ -95,11 +96,12 @@ namespace Library.Domain.Services
                 Author = model.Author,
                 Genre = model.Genre,
                 Publisher = model.Publisher,
-                Description = model.Description
+                Description = model.Description,
+                Img = uploadedFileName,
+                ImgPath = path,
             };
 
             var books = bookRepository.GetItems().ToList();
-
             var updateOrCreate = true;
 
             foreach (var oldBook in books)
@@ -125,7 +127,6 @@ namespace Library.Domain.Services
         public EditBookModel EditBookGet(long id)
         {
             var existingBook = bookRepository.Get(id);
-
             var editModel = new EditBookModel
             {
                 Id = existingBook.Id,
@@ -133,23 +134,28 @@ namespace Library.Domain.Services
                 Genre = existingBook.Genre,
                 Author = existingBook.Author,
                 Publisher = existingBook.Publisher,
-                Description = existingBook.Description
+                Description = existingBook.Description,
+                Img = existingBook.Img,
+                ImgPath = existingBook.ImgPath
             };
 
             return editModel;
         }
 
-        public void EditBookPost(EditBookModel model)
+        public void EditBookPost(EditBookModel model, string path, string uploadedFileName)
         {
             var existingBook = bookRepository.Get(model.Id);
 
             if (existingBook != null)
             {
+                existingBook.Id = model.Id;
                 existingBook.Name = model.Name;
                 existingBook.Genre = model.Genre;
                 existingBook.Author = model.Author;
                 existingBook.Publisher = model.Publisher;
                 existingBook.Description = model.Description;
+                existingBook.Img = uploadedFileName;
+                existingBook.ImgPath = path;
                 bookRepository.Update(existingBook);
             }
         }
@@ -160,6 +166,5 @@ namespace Library.Domain.Services
             existingBook.IsDeleted = true;
             bookRepository.Update(existingBook);
         }
-
     }
 }
