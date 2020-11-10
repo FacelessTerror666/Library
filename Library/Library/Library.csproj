@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BookParser\Library.Parser.csproj" />
     <ProjectReference Include="..\Library.Database\Library.Database.csproj" />
     <ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
   </ItemGroup>

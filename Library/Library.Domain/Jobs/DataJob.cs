@@ -23,8 +23,8 @@ namespace Library.Domain.Jobs
 
         public Task Execute(IJobExecutionContext context)
         {
-            lock (_locker)
-            {
+            //lock (_locker)
+            //{
                 using (var scope = serviceScopeFactory.CreateScope())
                 {
                     var authoCancel = scope.ServiceProvider.GetRequiredService<IOrderService>();
@@ -44,7 +44,7 @@ namespace Library.Domain.Jobs
 
                     return Task.CompletedTask;
                 }
-            }
+            //}
         }
     }
 }

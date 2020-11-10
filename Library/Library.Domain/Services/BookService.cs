@@ -109,8 +109,7 @@ namespace Library.Domain.Services
                 if (book.Name == oldBook.Name &
                     book.Author == oldBook.Author &
                     book.Genre == oldBook.Genre &
-                    book.Publisher == oldBook.Publisher &
-                    book.Description == oldBook.Description)
+                    book.Publisher == oldBook.Publisher)
                 {
                     updateOrCreate = false;
                     oldBook.IsDeleted = false;

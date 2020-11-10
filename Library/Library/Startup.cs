@@ -1,18 +1,12 @@
-using System;
-using Library.Database;
-using Library.Database.Entities;
-using Library.Database.Interfaces;
-using Library.Domain.Interfaces;
+using Library.Domain;
 using Library.Domain.Jobs;
-using Library.Domain.Services;
+using Library.Parser;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Library
 {
@@ -28,26 +22,26 @@ namespace Library
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<LibraryDbContext>(options => 
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddMyConfig(Configuration);
 
             services.AddTransient<JobFactory>();
             services.AddTransient<DataJob>();
+            services.AddSingleton<BookParserJob>();
 
-            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
-            services.AddTransient<IBookService, BookService>();
-            services.AddTransient<IOrderService, OrderService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IReportService, ReportService>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(BookParserJob),
+                cronExpression: "0 36 3 1/1 * ? *"));
+        //cronExpression: "0 2 * * * ? "));
 
-            services.AddIdentity<User, RoleInitialize>()
-                .AddEntityFrameworkStores<LibraryDbContext>();
+            services.AddHostedService<RoleInitializeHostedService>();
 
+            services.AddHttpClient();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -73,25 +67,6 @@ namespace Library
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            using var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                     .CreateScope();
-
-            var services = serviceScope.ServiceProvider;
-            try
-            {
-                var userManager = services.GetRequiredService<UserManager<User>>();
-                var rolesManager = services.GetRequiredService<RoleManager<RoleInitialize>>();
-                await RoleInitialize.InitializeAsync(userManager, rolesManager);
-            }
-            catch (Exception ex)
-            {
-                var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogError(ex, "An error occurred while seeding the database.");
-            }
-
-            DataScheduler.Start(services);
         }
     }
 }

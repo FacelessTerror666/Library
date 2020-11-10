@@ -2,8 +2,6 @@
 using Quartz;
 using Quartz.Impl;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Library.Domain.Jobs
 {

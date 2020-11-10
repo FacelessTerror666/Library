@@ -1,5 +1,6 @@
 ﻿using Library.Database.Interfaces;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Library.Database
 {
@@ -17,6 +18,17 @@ namespace Library.Database
         {
             _context.Add(entity);
             _context.SaveChanges();
+        }
+
+        public async Task CreateAsync(TEntity entity)
+        {
+            _context.Add(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public TEntity Get()
+        {
+            return _context.Set<TEntity>().FirstOrDefault();
         }
 
         public void Delete(TEntity entity)

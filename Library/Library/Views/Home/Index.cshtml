@@ -20,6 +20,13 @@
         </form>
     }
 
+    @if (User.IsInRole(RoleModel.Librarian))
+    {
+        <form method="post" asp-controller="Parser" asp-action="ParserIndex">
+            <input type="submit" value="Парсер" />
+        </form>
+    }
+
     @if (User.IsInRole(RoleModel.Admin))
     {
         <form method="get" asp-controller="Users" asp-action="Index">

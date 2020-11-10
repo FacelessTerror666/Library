@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace Library.Database.Interfaces
 {
@@ -6,6 +7,10 @@ namespace Library.Database.Interfaces
         where TEntity : class, IEntity
     {
         void Create(TEntity entity);
+
+        Task CreateAsync(TEntity entity);
+
+        public TEntity Get();
 
         void Update(TEntity entity);
 
