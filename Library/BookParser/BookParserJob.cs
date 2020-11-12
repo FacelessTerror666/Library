@@ -1,22 +1,21 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
-using System;
 using System.Threading.Tasks;
 
 namespace Library.Parser
 {
     public class BookParserJob : IJob
     {
-        private readonly IServiceProvider serviceProvider;
+        private readonly IServiceScopeFactory serviceScopeFactory;
 
-        public BookParserJob(IServiceProvider serviceProvider)
+        public BookParserJob(IServiceScopeFactory serviceScopeFactory)
         {
-            this.serviceProvider = serviceProvider;
+            this.serviceScopeFactory = serviceScopeFactory;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            using (var scope = serviceProvider.CreateScope())
+            using (var scope = serviceScopeFactory.CreateScope())
             {
                 var parsCount = 50;
                 var parser = scope.ServiceProvider.GetService<IBookParserService>();

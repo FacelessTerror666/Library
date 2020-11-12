@@ -1,4 +1,5 @@
-﻿using Library.Database.Entities;
+﻿using Library.Database;
+using Library.Database.Entities;
 using Library.Database.Interfaces;
 using Library.Domain.Interfaces;
 using Library.Domain.Models.Books;
@@ -24,39 +25,39 @@ namespace Library.Domain.Services
         {
             var authorQuery = bookRepository.GetItems()
                 .Where(x => x.IsDeleted == false)
-                .OrderBy(x => x.Author)
+                .OrderByExp("Author")
                 .Select(x => x.Author);
 
             var genreQuery = bookRepository.GetItems()
                 .Where(x => x.IsDeleted == false)
-                .OrderBy(x => x.Genre)
+                .OrderByExp("Genre")
                 .Select(x => x.Genre);
 
             var publisherQuery = bookRepository.GetItems()
                 .Where(x => x.IsDeleted == false)
-                .OrderBy(x => x.Publisher)
+                .OrderByExp("Publisher")
                 .Select(x => x.Publisher);
 
             var books = bookRepository.GetItems().Where(x => x.IsDeleted == false);
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                books = books.Where(x => x.Name.Contains(searchString));
+                books = books.WhereExp("Name", searchString);
             }
 
             if (!string.IsNullOrEmpty(bookAuthor))
             {
-                books = books.Where(x => x.Author == bookAuthor);
+                books = books.WhereExp("Author", searchString);
             }
 
             if (!string.IsNullOrEmpty(bookGenre))
             {
-                books = books.Where(x => x.Genre == bookGenre);
+                books = books.WhereExp("Genre", searchString);
             }
 
             if (!string.IsNullOrEmpty(bookPublisher))
             {
-                books = books.Where(x => x.Publisher == bookPublisher);
+                books = books.WhereExp("Publisher", searchString);
             }
 
             var bookSearch = new BooksSearchModel
@@ -64,7 +65,7 @@ namespace Library.Domain.Services
                 Authors = new SelectList(await authorQuery.Distinct().ToListAsync()),
                 Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
                 Publishers = new SelectList(await publisherQuery.Distinct().ToListAsync()),
-                Books = await books.OrderBy(m => m.Name).ToListAsync()
+                Books = await books.OrderByExp("Name").ToListAsync()
             };
 
             return bookSearch;

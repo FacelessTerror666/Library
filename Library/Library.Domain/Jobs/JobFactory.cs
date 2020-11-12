@@ -24,9 +24,6 @@ namespace Library.Domain.Jobs
 
         }
 
-        public void ReturnJob(IJob job)
-        {
-
-        }
+        public void ReturnJob(IJob job){ }
     }
 }

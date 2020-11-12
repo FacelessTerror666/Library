@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 
 namespace Library
 {
@@ -24,15 +27,21 @@ namespace Library
         {
             services.AddMyConfig(Configuration);
 
-            services.AddTransient<JobFactory>();
-            services.AddTransient<DataJob>();
+            services.AddSingleton<IJobFactory, JobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+
+            services.AddSingleton<DataJob>();
             services.AddSingleton<BookParserJob>();
 
             services.AddSingleton(new JobSchedule(
-                jobType: typeof(BookParserJob),
-                cronExpression: "0 36 3 1/1 * ? *"));
-        //cronExpression: "0 2 * * * ? "));
+               jobType: typeof(DataJob),
+               cronExpression: "0 2 * * * ? "));
+            services.AddSingleton(new JobSchedule(
+               jobType: typeof(BookParserJob),
+               //cronExpression: "0 36 3 1/1 * ? *"));
+               cronExpression: "0 2 * * * ? "));
 
+            services.AddHostedService<QuartzHostedService>();
             services.AddHostedService<RoleInitializeHostedService>();
 
             services.AddHttpClient();

@@ -14,7 +14,7 @@ namespace Library.Domain.Jobs
     public class DataJob : IJob
     {
         private readonly IServiceScopeFactory serviceScopeFactory;
-        private static readonly object _locker = new object();
+        //private static readonly object _locker = new object();
 
         public DataJob(IServiceScopeFactory serviceScopeFactory)
         {
