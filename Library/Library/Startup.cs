@@ -30,16 +30,15 @@ namespace Library
             services.AddSingleton<IJobFactory, JobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
-            services.AddSingleton<DataJob>();
+            services.AddSingleton<AuthoCancelJob>();
             services.AddSingleton<BookParserJob>();
 
             services.AddSingleton(new JobSchedule(
-               jobType: typeof(DataJob),
-               cronExpression: "0 2 * * * ? "));
+               jobType: typeof(AuthoCancelJob),
+               cronExpression: "0 0 0/12 * * ?"));
             services.AddSingleton(new JobSchedule(
                jobType: typeof(BookParserJob),
-               //cronExpression: "0 36 3 1/1 * ? *"));
-               cronExpression: "0 2 * * * ? "));
+               cronExpression: "0 25 13 * * ?"));
 
             services.AddHostedService<QuartzHostedService>();
             services.AddHostedService<RoleInitializeHostedService>();

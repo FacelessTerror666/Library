@@ -1,8 +1,6 @@
 ﻿using Library.Database.Entities;
 using Library.Database.Enums;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Library.Domain.Models.Orders
 {

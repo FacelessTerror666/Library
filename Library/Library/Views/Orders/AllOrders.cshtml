@@ -10,7 +10,9 @@
     @if (User.IsInRole(RoleModel.Librarian))
     {
         <div class="col-xs-2 no-padding pull-right">
-            <a asp-action="BooksList" asp-controller="Books" class="btn btn-default">Вернуться в библиотеку</a>
+            <a asp-action="BooksList" asp-controller="Books" class="btn btn-default">
+                <input type="submit" value="Вернуться в библиотеку" />
+            </a>
         </div>
     }
 </p>

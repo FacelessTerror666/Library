@@ -11,17 +11,17 @@ using System.Threading.Tasks;
 namespace Library.Domain.Jobs
 {
     [DisallowConcurrentExecution]
-    public class DataJob : IJob
+    public class AuthoCancelJob : IJob
     {
         private readonly IServiceScopeFactory serviceScopeFactory;
         //private static readonly object _locker = new object();
 
-        public DataJob(IServiceScopeFactory serviceScopeFactory)
+        public AuthoCancelJob(IServiceScopeFactory serviceScopeFactory)
         {
             this.serviceScopeFactory = serviceScopeFactory;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             //lock (_locker)
             //{
@@ -42,7 +42,7 @@ namespace Library.Domain.Jobs
                         authoCancel.AuthoCancelReservation(order);
                     }
 
-                    return Task.CompletedTask;
+                    await Task.CompletedTask;
                 }
             //}
         }

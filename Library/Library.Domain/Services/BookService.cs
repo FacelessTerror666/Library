@@ -42,22 +42,22 @@ namespace Library.Domain.Services
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                books = books.WhereExp("Name", searchString);
+                books = books.WhereExp("Name", "Contains", searchString);
             }
 
             if (!string.IsNullOrEmpty(bookAuthor))
             {
-                books = books.WhereExp("Author", searchString);
+                books = books.WhereExp("Author", "Contains", bookAuthor);
             }
 
             if (!string.IsNullOrEmpty(bookGenre))
             {
-                books = books.WhereExp("Genre", searchString);
+                books = books.WhereExp("Genre", "Contains", bookGenre);
             }
 
             if (!string.IsNullOrEmpty(bookPublisher))
             {
-                books = books.WhereExp("Publisher", searchString);
+                books = books.WhereExp("Publisher", "Contains", bookPublisher);
             }
 
             var bookSearch = new BooksSearchModel

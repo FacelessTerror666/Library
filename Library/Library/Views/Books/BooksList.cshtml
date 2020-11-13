@@ -9,24 +9,30 @@
     @if (User.IsInRole(RoleModel.Librarian))
     {
         <div class="col-xs-2 no-padding pull-right">
-            <a asp-action="CreateBook" class="btn btn-default">Добавить книгу</a>
+            <a asp-action="CreateBook" class="btn btn-default">
+                <input type="submit" value="Добавить книгу" />
+            </a>
         </div>
     }
 </p>
 
-<ul class="nav navbar-nav navbar-left">
-    @if (User.IsInRole(RoleModel.Librarian))
-    {
-        <li><a asp-controller="Orders" asp-action="AllOrders">Список всех забронированных книг</a></li>
-    }
-</ul>
+<p>
+    <ul class="nav navbar-nav navbar-left">
+        @if (User.IsInRole(RoleModel.Librarian))
+        {
+            <li><a asp-controller="Orders" asp-action="AllOrders">Список всех забронированных книг</a></li>
+        }
+    </ul>
+</p>
 
-<ul class="nav navbar-nav navbar-left">
-    @if (User.IsInRole(RoleModel.Reader))
-    {
-        <li><a asp-controller="Orders" asp-action="ReaderOrders">Список забронированных книг</a></li>
-    }
-</ul>
+<p>
+    <ul class="nav navbar-nav navbar-left">
+        @if (User.IsInRole(RoleModel.Reader))
+        {
+            <li><a asp-controller="Orders" asp-action="ReaderOrders">Список забронированных книг</a></li>
+        }
+    </ul>
+</p>
 
 <form asp-controller="Books" asp-action="BooksList" method="get">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
@@ -77,49 +83,49 @@
             <tbody>
                 @foreach (var item in Model.Books)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Author)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Genre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Publisher)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BookStatus)
-                    </td>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Author)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Genre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Publisher)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BookStatus)
+                        </td>
 
-                    <td>
-                        <div class="pull-right">
-                            @Html.ActionLink("Подробнее", "ViewBook", new { id = item.Id })
+                        <td>
+                            <div class="pull-right">
+                                @Html.ActionLink("Подробнее", "ViewBook", new { id = item.Id })
 
-                            @if (User.IsInRole(RoleModel.Reader))
-                            {
-                                @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
+                                @if (User.IsInRole(RoleModel.Reader))
                                 {
-                                    @Html.ActionLink("Забронировать", "Reservation", "Orders", new { id = item.Id })
+                                    @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
+                                    {
+                                        @Html.ActionLink("Забронировать", "Reservation", "Orders", new { id = item.Id })
+                                    }
                                 }
-                            }
 
-                            @if (User.IsInRole(RoleModel.Librarian))
-                            {
-                                @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
+                                @if (User.IsInRole(RoleModel.Librarian))
                                 {
-                                    @Html.ActionLink("Изменить", "EditBook", new { id = item.Id })
+                                    @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
+                                    {
+                                        @Html.ActionLink("Изменить", "EditBook", new { id = item.Id })
+                                    }
+                                    @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
+                                    {
+                                        @Html.ActionLink("Удалить", "DeleteBook", new { id = item.Id })
+                                    }
                                 }
-                                @if (item.BookStatus == Library.Database.Enums.BookStatus.Free)
-                                {
-                                    @Html.ActionLink("Удалить", "DeleteBook", new { id = item.Id })
-                                }
-                            }
-                        </div>
-                    </td>
-                </tr>
+                            </div>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

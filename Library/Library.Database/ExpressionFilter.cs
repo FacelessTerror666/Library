@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Library.Database
 {
-    public static class ExspressionFilter
+    public static class ExpressionFilter
     {
         public static IOrderedQueryable<T> OrderByExp<T>(this IQueryable<T> source, string property)
         {
@@ -19,21 +19,40 @@ namespace Library.Database
             var orderByMethod = methods.Where(m => m.Name == "OrderBy" && m.GetParameters().Count() == 2).First();
             orderByMethod = orderByMethod.MakeGenericMethod(typeof(T), propertyExpression.Type);//типизированный OrderBy
 
-            var result = (IOrderedQueryable<T>)orderByMethod.Invoke(null, new object[] { source, lambda });
+            var rezult = (IOrderedQueryable<T>)orderByMethod.Invoke(null, new object[] { source, lambda });
 
-            return result;
+            return rezult;
         }
 
-        public static IQueryable<T> WhereExp<T>(this IQueryable<T> source, string propertyName, string propertyValue)
+        public static IQueryable<T> WhereExp<T>(this IQueryable<T> source, string propertyName, string rule, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "type");
             var propertyExp = Expression.Property(parameterExp, propertyName);
-
-            MethodInfo method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
             var someValue = Expression.Constant(propertyValue, typeof(string));
-            var containsMethodExp = Expression.Call(propertyExp, method, someValue);
+            Expression<Func<T, bool>> lambda = null;
 
-            var lambda = Expression.Lambda<Func<T, bool>>(containsMethodExp, parameterExp);
+            if (rule == "==")
+            {
+                var equalExpr = Expression.Equal(propertyExp, someValue);
+                lambda = Expression.Lambda<Func<T, bool>>(equalExpr, parameterExp);
+            }
+            else if (rule == ">")
+            {
+                var greaterThanExpr = Expression.GreaterThan(propertyExp, someValue);
+                lambda = Expression.Lambda<Func<T, bool>>(greaterThanExpr, parameterExp);
+            }
+            else if (rule == "<")
+            {
+                var greaterThanExpr = Expression.LessThanOrEqual(propertyExp, someValue);
+                lambda = Expression.Lambda<Func<T, bool>>(greaterThanExpr, parameterExp);
+            }
+            else
+            {
+                MethodInfo ConMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                var containsMethodExp = Expression.Call(propertyExp, ConMethod, someValue);
+                lambda = Expression.Lambda<Func<T, bool>>(containsMethodExp, parameterExp);
+            };
+
             return source.Where(lambda);
         }
     }

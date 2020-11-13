@@ -1,4 +1,5 @@
-﻿using Library.Database.Entities;
+﻿using Library.Database;
+using Library.Database.Entities;
 using Library.Database.Enums;
 using Library.Database.Interfaces;
 using Library.Domain.Interfaces;
@@ -26,13 +27,15 @@ namespace Library.Domain.Services
         {
             var book = bookRepository.Get(id);
 
+            DateTime now = DateTime.Now;
+
             var order = new Order
             {
                 BookId = book.Id,
                 UserId = user.Id,
                 User = user,
-                DateBooking = DateTime.Now,
-                DateReturned = DateTime.Now.AddMinutes(2)/*Days(7)*/,
+                DateBooking = now,
+                DateReturned = now.AddDays(7),
                 OrderStatus = OrderStatus.Booked
             };
             orderRepository.Create(order);
@@ -51,7 +54,7 @@ namespace Library.Domain.Services
                 .Where(x => x.UserId == userId)
                 .Where(x => x.OrderStatus == OrderStatus.Booked || x.OrderStatus == OrderStatus.Given)
                 .Where(x => x.Book.IsDeleted == false)
-                .OrderBy(x => x.Book.Name)
+                .OrderByExp("DateBooking")
                 .Select(x => new ReaderOrdersModel
                 {
                     Id = x.Id,
@@ -72,7 +75,7 @@ namespace Library.Domain.Services
                 .Include(x => x.Book)
                 .Where(x => x.OrderStatus == OrderStatus.Booked || x.OrderStatus == OrderStatus.Given)
                 .Where(x => x.Book.IsDeleted == false)
-                .OrderBy(x => x.Book.Name)
+                .OrderByExp("DateBooking")
                 .Select(x => new AllOrdersModel
                 {
                     Id = x.Id,

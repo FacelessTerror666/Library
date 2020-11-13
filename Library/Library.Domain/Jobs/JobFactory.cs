@@ -8,7 +8,6 @@ namespace Library.Domain.Jobs
     {
         protected readonly IServiceScopeFactory serviceScopeFactory;
 
-
         public JobFactory(IServiceScopeFactory serviceScopeFactory)
         {
             this.serviceScopeFactory = serviceScopeFactory;
