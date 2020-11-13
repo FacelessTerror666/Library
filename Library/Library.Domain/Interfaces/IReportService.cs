@@ -1,6 +1,7 @@
 ﻿using Library.Database.Entities;
 using Library.Domain.Models.Orders;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Library.Domain.Interfaces
@@ -9,6 +10,6 @@ namespace Library.Domain.Interfaces
     {
         public Task<OrdersListModel> ReportSearchAsync(string orderStatus, int timeReport);
 
-        public string SaveReport(List<Order> orders);
+        public MemoryStream SaveReport(List<Order> orders);
     }
 }

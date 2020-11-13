@@ -4,6 +4,7 @@ using Library.Database.Interfaces;
 using Library.Domain.Interfaces;
 using Library.Domain.Models.Orders;
 using Microsoft.EntityFrameworkCore;
+using NPOI.Util;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -64,7 +65,7 @@ namespace Library.Domain.Services
             return orderSearchVM;
         }
 
-        public string SaveReport(List<Order> orders)
+        public MemoryStream SaveReport(List<Order> orders)
         {
             //Рабочая книга Excel
             XSSFWorkbook wb;
@@ -137,14 +138,20 @@ namespace Library.Domain.Services
                 sh.AutoSizeColumn(j);
                 i++;
             }
-            var dateTime = DateTime.Now.ToString();
-            var path = "wwwroot/files/Reports/Отчёт.xlsx";
 
-            //запишем всё в файл
-            var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
-            wb.Write(fs);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try
+            {
+                wb.Write(baos);
+            }
+            finally
+            {
+                baos.Close();
+            }
+            byte[] bytes = baos.ToByteArray();
+            var memoryStream = new MemoryStream(bytes);
 
-            return path;
+            return memoryStream;
         }
     }
 }

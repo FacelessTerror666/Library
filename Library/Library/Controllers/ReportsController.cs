@@ -23,13 +23,10 @@ namespace Library.Controllers
 
             if (save == true)
             {
-                var file_path = reportService.SaveReport(orderSearchVM.Orders);
-                file_path = Path.Combine(appEnvironment.ContentRootPath, file_path);
-                // Тип файла - content-type
+                var memoryStream = reportService.SaveReport(orderSearchVM.Orders);
                 string file_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                // Имя файла - необязательно
                 string file_name = "Отчёт.xlsx";
-                return PhysicalFile(file_path, file_type, file_name);
+                return File(memoryStream, file_type, file_name);
             }
 
             return View(orderSearchVM);
