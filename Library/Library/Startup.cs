@@ -27,11 +27,11 @@ namespace Library
         {
             services.AddMyConfig(Configuration);
 
-            services.AddSingleton<IJobFactory, JobFactory>();
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddTransient<IJobFactory, JobFactory>();
+            services.AddTransient<ISchedulerFactory, StdSchedulerFactory>();
 
-            services.AddSingleton<AuthoCancelJob>();
-            services.AddSingleton<BookParserJob>();
+            services.AddTransient<AuthoCancelJob>();
+            services.AddTransient<BookParserJob>();
 
             services.AddSingleton(new JobSchedule(
                jobType: typeof(AuthoCancelJob),

@@ -19,9 +19,9 @@ namespace Library.Database
             var orderByMethod = methods.Where(m => m.Name == "OrderBy" && m.GetParameters().Count() == 2).First();
             orderByMethod = orderByMethod.MakeGenericMethod(typeof(T), propertyExpression.Type);//типизированный OrderBy
 
-            var rezult = (IOrderedQueryable<T>)orderByMethod.Invoke(null, new object[] { source, lambda });
+            var result = (IOrderedQueryable<T>)orderByMethod.Invoke(null, new object[] { source, lambda });
 
-            return rezult;
+            return result;
         }
 
         public static IQueryable<T> WhereExp<T>(this IQueryable<T> source, string propertyName, string rule, string propertyValue)
@@ -29,7 +29,7 @@ namespace Library.Database
             var parameterExp = Expression.Parameter(typeof(T), "type");
             var propertyExp = Expression.Property(parameterExp, propertyName);
             var someValue = Expression.Constant(propertyValue, typeof(string));
-            Expression<Func<T, bool>> lambda = null;
+            Expression<Func<T, bool>> lambda;
 
             if (rule == "==")
             {

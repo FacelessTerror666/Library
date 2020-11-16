@@ -27,7 +27,7 @@ namespace Library.Domain.Services
         {
             var book = bookRepository.Get(id);
 
-            DateTime now = DateTime.Now;
+            var now = DateTime.Now;
 
             var order = new Order
             {
